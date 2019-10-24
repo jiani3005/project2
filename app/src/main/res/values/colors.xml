@@ -9,6 +9,9 @@
     <color name="basil_lightGreen">#B9E4C9</color>
     <color name="basil_orange">#FD5523</color>
     <color name="basil_yellow">#FFFBE6</color>
+    <color name="basil_blueGreen">#84DCCF</color>
+    <color name="basil_blue">#A6D9F7</color>
+    <color name="basil_jet">#312F2F</color>
 
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
