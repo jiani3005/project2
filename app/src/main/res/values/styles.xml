@@ -14,14 +14,14 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/basil_jet</item>
 
-        <!--        <item name="colorPrimaryVariant">@color/my_app_primary_variant_color</item>-->
-        <!--        <item name="colorSecondaryVariant">@color/my_app_secondary_variant_color</item>-->
-        <!--        <item name="colorSurface">@color/my_app_surface_color</item>-->
-        <!--        <item name="colorOnPrimary">@color/my_app_color_on_primary</item>-->
-        <!--        <item name="colorOnSecondary">@color/my_app_color_on_secondary</item>-->
-        <!--        <item name="colorOnBackground">@color/my_app_color_on_background</item>-->
-        <!--        <item name="colorOnError">@color/my_app_color_on_error</item>-->
-        <!--        <item name="colorOnSurface">@color/my_app_color_on_surface</item>-->
+<!--                <item name="colorPrimaryVariant">@color/my_app_primary_variant_color</item>-->
+<!--                <item name="colorSecondaryVariant">@color/my_app_secondary_variant_color</item>-->
+<!--                <item name="colorSurface">@color/my_app_surface_color</item>-->
+<!--                <item name="colorOnPrimary">@color/my_app_color_on_primary</item>-->
+<!--                <item name="colorOnSecondary">@color/my_app_color_on_secondary</item>-->
+<!--                <item name="colorOnBackground">@color/my_app_color_on_background</item>-->
+<!--                <item name="colorOnError">@color/my_app_color_on_error</item>-->
+<!--                <item name="colorOnSurface">@color/my_app_color_on_surface</item>-->
         <item name="scrimBackground">@color/mtrl_scrim_color</item>
         <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1</item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.MaterialComponents.Headline2</item>
@@ -38,5 +38,16 @@
         <item name="textAppearanceOverline">@style/TextAppearance.MaterialComponents.Overline</item>
 
     </style>
+
+    <style name="LandingTheme" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">
+<!--    <style name="LandingTheme" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">-->
+        <item name="colorPrimary">#52B2CF</item>
+        <item name="colorPrimaryDark">#386FA4</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionBarItemBackground">@color/basil_blue</item>
+
+    </style>
+
+
 
 </resources>

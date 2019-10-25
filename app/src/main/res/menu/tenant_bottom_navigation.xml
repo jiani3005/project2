@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_tenant_listings"
+        android:enabled="true"
+        android:icon="@drawable/listings"
+        android:title="Listings"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_tenant_map"
+        android:enabled="true"
+        android:icon="@drawable/map"
+        android:title="Map"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_tenant_profile"
+        android:enabled="true"
+        android:icon="@drawable/account"
+        android:title="Profile"
+        app:showAsAction="ifRoom" />
+
+</menu>

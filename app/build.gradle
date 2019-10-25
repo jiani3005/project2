@@ -37,9 +37,13 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
+    implementation 'de.hdodenhof:circleimageview:3.0.1'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 }
 
 repositories {
     google()
     jcenter()
+    mavenCentral()
 }

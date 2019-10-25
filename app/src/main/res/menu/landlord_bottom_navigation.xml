@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_landlord_property"
+        android:enabled="true"
+        android:icon="@drawable/property"
+        android:title="Property"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_landlord_tenant"
+        android:enabled="true"
+        android:icon="@drawable/tenant"
+        android:title="Tenant"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_landlord_map"
+        android:enabled="true"
+        android:icon="@drawable/map"
+        android:title="Map"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_landlord_profile"
+        android:enabled="true"
+        android:icon="@drawable/account"
+        android:title="Profile"
+        app:showAsAction="ifRoom" />
+
+</menu>
