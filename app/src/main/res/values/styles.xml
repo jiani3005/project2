@@ -39,8 +39,8 @@
 
     </style>
 
-    <style name="LandingTheme" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">
-<!--    <style name="LandingTheme" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">-->
+<!--    <style name="LandingTheme" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">-->
+    <style name="LandingTheme" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
         <item name="colorPrimary">#52B2CF</item>
         <item name="colorPrimaryDark">#386FA4</item>
         <item name="colorAccent">@color/colorAccent</item>

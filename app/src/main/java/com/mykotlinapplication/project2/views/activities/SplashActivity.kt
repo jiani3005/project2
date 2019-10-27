@@ -1,8 +1,9 @@
-package com.mykotlinapplication.project2
+package com.mykotlinapplication.project2.views.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.mykotlinapplication.project2.R
 
 class SplashActivity : AppCompatActivity() {
 

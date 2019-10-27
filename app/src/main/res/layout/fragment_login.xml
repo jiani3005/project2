@@ -43,11 +43,11 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editText_email"
-                        android:drawableStart="@drawable/email"
-                        android:drawablePadding="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLines="1"/>
+                        android:drawableStart="@drawable/email"
+                        android:drawablePadding="5dp"
+                        android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -67,17 +67,17 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editText_password"
-                        android:inputType="textPassword"
-                        android:maxLines="1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableStart="@drawable/key"
-                        android:drawablePadding="5dp" />
+                        android:drawablePadding="5dp"
+                        android:inputType="textPassword"
+                        android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <CheckBox
-                    android:id="@+id/checkBox"
+                    android:id="@+id/checkBox_rememberMe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
@@ -97,7 +97,7 @@
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+                    app:layout_constraintTop_toBottomOf="@+id/checkBox_rememberMe" />
 
                 <TextView
                     android:id="@+id/textView_forgotPassword"
@@ -156,17 +156,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/house_logo" />
 
-        <!--    <ImageView-->
-        <!--        android:id="@+id/imageView2"-->
-        <!--        android:layout_width="wrap_content"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        android:layout_marginTop="20dp"-->
-        <!--        app:layout_constraintEnd_toEndOf="parent"-->
-        <!--        app:layout_constraintHorizontal_bias="0.5"-->
-        <!--        app:layout_constraintStart_toStartOf="parent"-->
-        <!--        app:layout_constraintTop_toTopOf="parent"-->
-        <!--        app:srcCompat="@drawable/avantgarde_logo" />-->
-
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateDrawable="@drawable/progress_bar_style"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

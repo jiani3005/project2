@@ -1,63 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior">
+<layout>
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/landing_appbar"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:layout_alignParentTop="true"
-        android:keyboardNavigationCluster="false">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior">
 
-        <RelativeLayout
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/landing_appbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingHorizontal="5dp">
+            android:layout_height="?android:attr/actionBarSize"
+            android:layout_alignParentTop="true"
+            android:keyboardNavigationCluster="false">
 
-            <ImageView
-                android:id="@+id/button_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:clickable="true"
-                android:src="@drawable/arrow_back" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="5dp">
 
-            <TextView
-                android:id="@+id/textView_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/fredoka_one"
-                android:text="Title"
-                android:textColor="@color/basil_jet"
-                android:textSize="36sp" />
+                <ImageView
+                    android:id="@+id/button_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:clickable="true"
+                    android:src="@drawable/arrow_back" />
+
+                <TextView
+                    android:id="@+id/textView_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/fredoka_one"
+                    android:text="Tenant"
+                    android:textColor="@color/basil_jet"
+                    android:textSize="36sp" />
 
 
-        </RelativeLayout>
+            </RelativeLayout>
 
 
-    </com.google.android.material.appbar.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/tenant_bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
-        android:background="@color/basil_blueGreen"
-        app:itemIconTint="@drawable/bottom_icon_colors"
-        app:itemTextColor="@drawable/bottom_icon_colors"
-        app:menu="@menu/tenant_bottom_navigation" />
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/tenant_bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:background="@color/basil_blueGreen"
+            app:itemIconTint="@drawable/bottom_icon_colors"
+            app:itemTextColor="@drawable/bottom_icon_colors"
+            app:menu="@menu/tenant_bottom_navigation" />
 
-    <FrameLayout
-        android:id="@+id/tenant_container"
-        android:layout_width="match_parent"
-        android:layout_height="546dp"
-        android:layout_below="@id/landing_appbar">
+        <FrameLayout
+            android:id="@+id/tenant_container"
+            android:layout_width="match_parent"
+            android:layout_height="546dp"
+            android:layout_below="@id/landing_appbar">
 
-    </FrameLayout>
+        </FrameLayout>
 
-</RelativeLayout>
+    </RelativeLayout>
+</layout>

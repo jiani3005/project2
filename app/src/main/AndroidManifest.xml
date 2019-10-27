@@ -6,34 +6,35 @@
 
     <application
         android:allowBackup="true"
+        android:name=".MyApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LandlordActivity"
+        <activity android:name=".views.activities.LandlordActivity"
             android:theme="@style/LandingTheme">
         </activity>
         <activity
-            android:name=".TenantActivity"
+            android:name=".views.activities.TenantActivity"
             android:theme="@style/LandingTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
-        <activity android:name=".SplashActivity">
+        <activity android:name=".views.activities.SplashActivity">
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".views.activities.MainActivity"
             android:theme="@style/MainTheme"
             android:windowSoftInputMode="adjustResize">
 
