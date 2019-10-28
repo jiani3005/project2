@@ -44,7 +44,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/tenant_bottom_navigation"
+            android:id="@+id/landlord_bottom_navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -56,7 +56,7 @@
             app:menu="@menu/landlord_bottom_navigation" />
 
         <FrameLayout
-            android:id="@+id/tenant_container"
+            android:id="@+id/landlord_container"
             android:layout_width="match_parent"
             android:layout_height="546dp"
             android:layout_below="@id/landing_appbar">
