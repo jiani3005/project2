@@ -23,7 +23,8 @@ class MainViewModel: ViewModel() {
     var registerListener: RegisterListener?= null
     var forgotPasswordListener: ForgotPasswordListener? = null
     private val TAG = "MainViewModel"
-    val apiInterface = ApiClient.getApiInterface()
+    private val apiInterface = ApiClient.getApiInterface()
+    private val isUpdating = MutableLiveData<Boolean>()
 
     fun loadLoginInfo(): LiveData<ArrayList<Any>> {
         var info = MutableLiveData<ArrayList<Any>>()
@@ -52,11 +53,11 @@ class MainViewModel: ViewModel() {
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             loginListener?.setEmailError("Invalid email")
         } else {
-            loginListener?.showProgressBar()
+            isUpdating.value = true
             apiInterface.userLogin(email, password).enqueue(object: retrofit2.Callback<JsonElement> {
                 override fun onFailure(call: Call<JsonElement>, t: Throwable) {
                     loginListener?.onFailure("Account is suspended.\nPlease try again in 5 minutes")
-                    loginListener?.hideProgressBar()
+                    isUpdating.value = false
                     Log.e(TAG, t.toString())
                 }
 
@@ -79,22 +80,21 @@ class MainViewModel: ViewModel() {
                                     val userEmail = responseJsonObject["useremail"].asString
                                     val appApiKey = responseJsonObject["appapikey"].asString
 
-                                    SharedPreferencesManager.setUserLoginInfo(userId, userType, userEmail, appApiKey)
+                                    SharedPreferencesManager.setLoginSession(userId, userType, userEmail, appApiKey)
 
                                     loginListener?.onSuccess("Login success!")
 
                                     isTenant.value = userType == "tenant"
 
-                                    loginListener?.hideProgressBar()
                                 } else {
                                     val errorResponse = responseJsonObject["msg"].asJsonArray
                                     val returnCode = errorResponse[0].asInt
                                     if (returnCode == 0) {
                                         loginListener?.onFailure("Incorrect email/password.\n$returnCode attempt(s) left.\nPlease try again in 5 minutes.")
-                                        loginListener?.hideProgressBar()
+
                                     } else {
                                         loginListener?.onFailure("Incorrect email/password.\n$returnCode attempt(s) left.")
-                                        loginListener?.hideProgressBar()
+
                                     }
 //                                    Log.d(TAG, "Login failed!. $returnCode attempt(s) left")
                                 }
@@ -110,6 +110,7 @@ class MainViewModel: ViewModel() {
                     } else {
                         Log.e(TAG, "loginResponseError = ${response.errorBody()}")
                     }
+                    isUpdating.value = false
                 }
             })
 
@@ -137,13 +138,13 @@ class MainViewModel: ViewModel() {
                 accountFor = "tenant"
             }
 
-            registerListener?.showProgressBar()
+            isUpdating.value = true
 
             apiInterface.userRegister(email, email, password, accountFor).enqueue(object : retrofit2.Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     registerListener?.onFailure("Register failed.\nEmail already exists.")
                     Log.e(TAG, "User register retrofit on failure: ${t.toString()}")
-                    registerListener?.hideProgressBar()
+                    isUpdating.value = false
                 }
 
                 override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -159,11 +160,11 @@ class MainViewModel: ViewModel() {
                         } else {
                             registerListener?.onFailure("Register failed.\nEmail already exists.")
                         }
-                        registerListener?.hideProgressBar()
+
                     } else {
                         Log.e(TAG, "User register response failure")
-                        registerListener?.hideProgressBar()
                     }
+                    isUpdating.value = false
 
                 }
 
@@ -182,7 +183,7 @@ class MainViewModel: ViewModel() {
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             forgotPasswordListener?.setEmailError("Invalid email")
         } else {
-            forgotPasswordListener?.showProgressBar()
+            isUpdating.value = true
             apiInterface.userForgotPassword(email).enqueue(object: retrofit2.Callback<JsonElement> {
                 override fun onFailure(call: Call<JsonElement>, t: Throwable) {
                     Log.e(TAG, "ForgotPassword onFailure: $t")
@@ -203,6 +204,7 @@ class MainViewModel: ViewModel() {
                                     val password = responseJSONObject.get("userpassword").asString
 
                                     forgotPasswordListener?.onSuccess("$userEmail\n$password")
+                                    result.value = true
 //                                forgotPasswordListener?.hideProgressBar()
 
                                 } else {
@@ -221,7 +223,7 @@ class MainViewModel: ViewModel() {
                         Log.e(TAG, "ForgotPassword response failure")
                     }
 
-                    forgotPasswordListener?.hideProgressBar()
+                    isUpdating.value = false
 
                 }
 
@@ -231,8 +233,25 @@ class MainViewModel: ViewModel() {
         return result
     }
 
-//    fun redirectToLanding(): LiveData<Boolean> {
-//        var redirect = Mutable
-//    }
+    fun checkLoginSession(): LiveData<Boolean?> {
+        var redirectToTenant = MutableLiveData<Boolean?>()
+        redirectToTenant.value = null
+
+        val response = SharedPreferencesManager.getLoginSession()
+
+        if (response == "tenant") {
+            redirectToTenant.value = true
+        } else if (response == "landlord") {
+            redirectToTenant.value = false
+        } else {
+            redirectToTenant.value = null
+        }
+
+        return redirectToTenant
+    }
+
+    fun getIsUpdating(): LiveData<Boolean> {
+        return isUpdating
+    }
 
 }

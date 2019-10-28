@@ -28,6 +28,15 @@ class RegisterFragment: Fragment(), RegisterListener {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
         mainActivity.viewModel.registerListener = this
 
+        mainActivity.viewModel.getIsUpdating().observe(mainActivity, Observer { isUpdating ->
+            if (isUpdating) {
+                binding.progressBar.visibility = View.VISIBLE
+            } else {
+                binding.progressBar.visibility = View.GONE
+            }
+
+        })
+
         binding.buttonRegister.setOnClickListener {
             var isTenant = false
             if (binding.radioGroup.checkedRadioButtonId == -1) {
@@ -76,12 +85,5 @@ class RegisterFragment: Fragment(), RegisterListener {
         Toast.makeText(mainActivity, message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun hideProgressBar() {
-        binding.progressBar.visibility = View.GONE
-    }
-
-    override fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
-    }
 
 }

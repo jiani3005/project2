@@ -9,7 +9,7 @@ object SharedPreferencesManager {
     private val sharedPreferences = MyApplication.context.getSharedPreferences("AvantGarde", Context.MODE_PRIVATE)
     private val editor = sharedPreferences.edit()
 
-    fun setUserLoginInfo(userId: String, userType: String, userEmail: String, appApiKey: String) {
+    fun setLoginSession(userId: String, userType: String, userEmail: String, appApiKey: String) {
         editor.putString("user.id", userId)
         editor.putString("user.type", userType)
         editor.putString("user.email", userEmail)
@@ -30,6 +30,30 @@ object SharedPreferencesManager {
         result.add(sharedPreferences.getString("password", "")!!)
         result.add(sharedPreferences.getBoolean("remember", false))
         return result
+    }
+
+    fun getLoginSession(): String {
+        return sharedPreferences.getString("user.type", "")!!
+    }
+
+    fun getUserType(): String {
+        return sharedPreferences.getString("user.type", "")!!
+    }
+
+    fun getUserId(): String {
+        return sharedPreferences.getString("user.id", "")!!
+    }
+
+    fun getUserEmail(): String {
+        return sharedPreferences.getString("user.email", "")!!
+    }
+
+    fun clearLoginSession() {
+        editor.putString("user.id", "")
+        editor.putString("user.type", "")
+        editor.putString("user.email", "")
+        editor.putString("user.appApiKey", "")
+        editor.commit()
     }
 
 }

@@ -24,15 +24,27 @@ class LoginFragment: Fragment(), LoginListener {
         mainActivity = context as MainActivity
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mainActivity.viewModel.loginListener = this
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
-
-        mainActivity.viewModel.loginListener = this
 
         mainActivity.viewModel.loadLoginInfo().observe(mainActivity, Observer {
             binding.editTextEmail.setText(it[0].toString())
             binding.editTextPassword.setText(it[1].toString())
             binding.checkBoxRememberMe.isChecked = it[2] as Boolean
+        })
+
+        mainActivity.viewModel.getIsUpdating().observe(mainActivity, Observer { isUpdating ->
+            if (isUpdating) {
+                binding.progressBar.visibility = View.VISIBLE
+            } else {
+                binding.progressBar.visibility = View.GONE
+            }
+
         })
 
         binding.buttonLogin.setOnClickListener {
@@ -79,14 +91,6 @@ class LoginFragment: Fragment(), LoginListener {
 
     override fun onSuccess(message: String) {
         Toast.makeText(mainActivity, message, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun hideProgressBar() {
-        binding.progressBar.visibility = View.GONE
-    }
-
-    override fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
     }
 
 }

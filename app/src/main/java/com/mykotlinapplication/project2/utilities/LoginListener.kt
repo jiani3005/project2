@@ -8,7 +8,5 @@ interface LoginListener {
     fun setPasswordError(message: String)
     fun onFailure(message: String)
     fun onSuccess(message: String)
-    fun hideProgressBar()
-    fun showProgressBar()
 
 }

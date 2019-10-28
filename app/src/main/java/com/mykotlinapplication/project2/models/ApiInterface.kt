@@ -22,4 +22,22 @@ interface ApiInterface {
     @GET("pro_mgt_forgot_pass.php")
     fun userForgotPassword(@Query("email") email: String): Call<JsonElement>
 
+    @GET("property.php")
+    fun getLandlordProperty(@Query("userid") userId: String, @Query("usertype") userType: String): Call<JsonElement>
+
+    @GET("pro_mgt_add_pro.php")
+    fun addProperty(@Query("address") address: String, @Query("city") city: String, @Query("state") state: String,
+                    @Query("country") country: String, @Query("pro_status") property_status: String,
+                    @Query("purchase_price") price: String, @Query("mortage_info") mortgageInfo: String,
+                    @Query("userid") userId: String, @Query("usertype") userType: String,
+                    @Query("latitude") latitude: String, @Query("longitude") longitude: String): Call<JsonElement>
+
+    @GET("pro_mgt_tenent_details.php")
+    fun getTenants(@Query("landlordid") userId: String): Call<JsonElement>
+
+    @GET("pro_mgt_add_tenants.php")
+    fun addTenant(@Query("name") name: String, @Query("email") email: String, @Query("address") address: String,
+                  @Query("mobile") phone: String, @Query("propertyid") propertyId: String,
+                  @Query("landlordid") landlordId: String): Call<ResponseBody>
+
 }

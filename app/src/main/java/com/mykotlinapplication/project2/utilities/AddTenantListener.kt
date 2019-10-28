@@ -1,13 +1,13 @@
 package com.mykotlinapplication.project2.utilities
 
-interface AddPropertyListener {
+interface AddTenantListener {
 
+    fun setNameError()
+    fun setPhoneError(message: String)
+    fun setEmailError(message: String)
     fun setAddressError()
     fun setCityError()
     fun setStateError()
     fun setPostcodeError(message: String)
-    fun setPropertyStatusError()
-    fun setPriceError()
-    fun setMortgageInfoError()
 
 }

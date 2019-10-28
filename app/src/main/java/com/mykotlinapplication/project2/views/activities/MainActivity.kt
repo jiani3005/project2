@@ -5,7 +5,9 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.ActivityMainBinding
@@ -20,15 +22,26 @@ class MainActivity : AppCompatActivity(), MainHelper {
     private lateinit var binding: ActivityMainBinding
     lateinit var viewModel: MainViewModel
     private val TAG = "MainActivity"
-//    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-//        sharedPreferences = getSharedPreferences("AvantGarde", Context.MODE_PRIVATE)
 
-        goToLogin()
+        viewModel.checkLoginSession().observe(this, Observer { isSessionExists ->
+//            Log.d(TAG, "isSessionExist = $isSessionExists")
+            if (isSessionExists != null) {
+                if (isSessionExists == true) {
+                    goToTenantActivity()
+                } else {
+                    goToLandlordActivity()
+                }
+            } else {
+                goToLogin()
+            }
+        })
+
+
     }
 
     override fun goToLogin() {
@@ -53,6 +66,11 @@ class MainActivity : AppCompatActivity(), MainHelper {
 
     override fun onBackPressed() {
 //        super.onBackPressed()
-        supportFragmentManager.popBackStack()
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            super.onBackPressed()
+        }
+
     }
 }

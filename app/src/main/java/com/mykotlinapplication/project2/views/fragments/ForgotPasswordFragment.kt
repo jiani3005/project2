@@ -28,6 +28,15 @@ class ForgotPasswordFragment: Fragment(), ForgotPasswordListener {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_forgot_password, container, false)
         mainActivity.viewModel.forgotPasswordListener = this
 
+        mainActivity.viewModel.getIsUpdating().observe(mainActivity, Observer { isUpdating ->
+            if (isUpdating) {
+                binding.progressBar.visibility = View.VISIBLE
+            } else {
+                binding.progressBar.visibility = View.GONE
+            }
+
+        })
+
         binding.buttonSubmit.setOnClickListener {
             mainActivity.viewModel.userForgotPassword(binding.editTextEmail.text.toString()).observe(mainActivity,
                 Observer { isSuccess ->
@@ -54,11 +63,4 @@ class ForgotPasswordFragment: Fragment(), ForgotPasswordListener {
         Toast.makeText(mainActivity, message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun hideProgressBar() {
-        binding.progressBar.visibility = View.GONE
-    }
-
-    override fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
-    }
 }

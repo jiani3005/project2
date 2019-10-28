@@ -50,3 +50,7 @@ repositories {
     jcenter()
     mavenCentral()
 }
+
+androidExtensions {
+    experimental = true
+}
