@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -31,7 +32,6 @@ class PropertyDetailsFragment: Fragment() {
         landlordActivity.editAppBar("Property Details", true)
 
 //        val property: Property = arguments?.getParcelable("property")!!
-        val property: Property
 
         landlordActivity.viewModel.getSelectedProperty().observe(landlordActivity, Observer { selectedProperty ->
             binding.textViewAddress.text = "${selectedProperty.address}\n${selectedProperty.city}, ${selectedProperty.state} ${selectedProperty.country}"
@@ -41,7 +41,8 @@ class PropertyDetailsFragment: Fragment() {
             binding.textViewDescription.text = "Mortgage Info: ${selectedProperty.mortgageInfo}"
 
             binding.textViewAddTenant.setOnClickListener {
-                landlordActivity.goToAddTenant(selectedProperty)
+//                Toast.makeText(landlordActivity, "Property ID = ${selectedProperty.id}", Toast.LENGTH_SHORT).show()
+                landlordActivity.goToAddTenant()
             }
         })
 

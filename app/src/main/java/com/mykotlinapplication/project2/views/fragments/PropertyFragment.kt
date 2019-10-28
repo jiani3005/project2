@@ -2,9 +2,11 @@ package com.mykotlinapplication.project2.views.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -32,6 +34,8 @@ class PropertyFragment: Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_property, container, false)
         landlordActivity.editAppBar("Property", false)
 
+        initPropertyRecyclerView()
+
 
         binding.buttonAddProperty.setOnClickListener {
             landlordActivity.goToAddProperty()
@@ -51,9 +55,6 @@ class PropertyFragment: Fragment() {
         })
 
 
-        initPropertyRecyclerView()
-
-
         return binding.root
     }
 
@@ -62,4 +63,6 @@ class PropertyFragment: Fragment() {
         binding.recyclerViewGallery.layoutManager = LinearLayoutManager(context)
         binding.recyclerViewGallery.adapter = propertyListAdapter
     }
+
+
 }

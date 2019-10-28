@@ -120,6 +120,47 @@ object LandlordRepository {
         return isSuccess
     }
 
+    fun deleteProperty(propertyId: String): MutableLiveData<Boolean> {
+        var isSuccess = MutableLiveData<Boolean>()
+
+        isUpdating.value = true
+        apiInterface.deleteProperty(propertyId).enqueue(object: Callback<JsonElement> {
+            override fun onFailure(call: Call<JsonElement>, t: Throwable) {
+                Log.e(TAG, "deleteProperty() onFailure: $t")
+            }
+
+            override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
+                if (response.isSuccessful) {
+
+                    if (response.body()!!.isJsonObject) {
+                        try {
+                            val responseJsonObject = response.body()!!.asJsonObject
+                            val msgArray = responseJsonObject["msg"].asJsonArray
+
+                            Log.i(TAG, msgArray[0].asString)
+
+                            isSuccess.value = msgArray[0].asString == "deleted property succesfully"
+
+
+                        } catch (e: Exception) {
+                            Log.e(TAG, "deleteProperty() convert response failure: $e")
+                        }
+                    } else {
+                        Log.e(TAG, "deleteProperty() convert response failure!")
+                    }
+
+                    isUpdating.value = false
+                } else {
+                    Log.e(TAG, "deleteProperty() response failure: ${response.errorBody()}")
+                }
+            }
+
+        })
+
+        return isSuccess
+
+    }
+
     fun getTenants(): MutableLiveData<ArrayList<Tenant>> {
         var tenants = MutableLiveData<ArrayList<Tenant>>()
 

@@ -7,12 +7,14 @@ interface LandlordHelper {
 
     fun editAppBar(title: String, showBackButton: Boolean)
     fun goToProperty()
-    fun goToPropertyDetails(property: Property)
+    fun goToPropertyDetails()
     fun goToAddProperty()
+    fun deleteProperty()
     fun goToTenant()
-    fun goToTenantDetails(tenant: Tenant)
-    fun goToAddTenant(property: Property)
+    fun goToTenantDetails()
+    fun goToAddTenant()
     fun goToMap()
     fun goToProfile()
     fun goToMainActivity()
+
 }

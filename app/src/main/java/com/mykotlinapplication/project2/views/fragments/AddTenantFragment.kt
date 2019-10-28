@@ -44,7 +44,8 @@ class AddTenantFragment: Fragment(), AddTenantListener {
                         if (isSuccess) {
                             onSuccess()
                             landlordActivity.supportFragmentManager.popBackStack()
-                            landlordActivity.goToPropertyDetails(selectedProperty)
+//                            landlordActivity.viewModel.setSelectedProperty(selectedProperty)
+                            landlordActivity.goToPropertyDetails()
                         } else {
                             onFailure()
                         }

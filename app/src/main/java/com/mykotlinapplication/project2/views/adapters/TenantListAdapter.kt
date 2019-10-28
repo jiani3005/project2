@@ -49,7 +49,10 @@ class TenantListAdapter (var items: ArrayList<Tenant>): RecyclerView.Adapter<Ten
 
         override fun onClick(v: View) {
             when (v.id) {
-                binding.tenantItem.id -> landlordActivity.goToTenantDetails(items[adapterPosition])
+                binding.tenantItem.id -> {
+                    landlordActivity.viewModel.setSelectedTenant(items[adapterPosition])
+                    landlordActivity.goToTenantDetails()
+                }
             }
         }
 

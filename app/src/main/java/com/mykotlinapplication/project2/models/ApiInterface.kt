@@ -40,4 +40,7 @@ interface ApiInterface {
                   @Query("mobile") phone: String, @Query("propertyid") propertyId: String,
                   @Query("landlordid") landlordId: String): Call<ResponseBody>
 
+    @GET("remove-property.php?")
+    fun deleteProperty(@Query("propertyid") propertyId: String): Call<JsonElement>
+
 }

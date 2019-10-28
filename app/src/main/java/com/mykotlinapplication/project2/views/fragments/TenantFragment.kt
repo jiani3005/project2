@@ -31,18 +31,13 @@ class TenantFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_tenant, container, false)
         landlordActivity.editAppBar("Tenant", true)
+        initTenantListAdapter()
 
         landlordActivity.viewModel.getTenants().observe(landlordActivity, Observer { tenantArrayList ->
             tenantList = tenantArrayList
             tenantListAdapter.setData(tenantArrayList)
         })
 
-        initTenantListAdapter()
-
-
-//        binding.floatingActionButton.setOnClickListener {
-//            landlordActivity.goToAddTenant()
-//        }
 
         return binding.root
     }

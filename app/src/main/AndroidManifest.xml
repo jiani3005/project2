@@ -13,6 +13,11 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCebBG0zbNiqsrqW8yd1MevK6Vt54tFm7U"/>
+
         <activity android:name=".views.activities.LandlordActivity"
             android:theme="@style/LandingTheme">
         </activity>

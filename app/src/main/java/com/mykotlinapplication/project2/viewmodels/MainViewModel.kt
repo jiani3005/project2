@@ -50,10 +50,13 @@ class MainViewModel: ViewModel() {
             loginListener?.setEmailError("Please enter your email")
         } else if (password.isNullOrEmpty()) {
             loginListener?.setPasswordError("Please enter your password")
+        } else if (password.length < 8) {
+            loginListener?.setPasswordError("Password must be at least length of 8")
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             loginListener?.setEmailError("Invalid email")
         } else {
             isUpdating.value = true
+
             apiInterface.userLogin(email, password).enqueue(object: retrofit2.Callback<JsonElement> {
                 override fun onFailure(call: Call<JsonElement>, t: Throwable) {
                     loginListener?.onFailure("Account is suspended.\nPlease try again in 5 minutes")
@@ -99,6 +102,8 @@ class MainViewModel: ViewModel() {
 //                                    Log.d(TAG, "Login failed!. $returnCode attempt(s) left")
                                 }
 
+                                isUpdating.value = false
+
                             } catch (e: Exception) {
 //                                Log.d(TAG, "Account is suspended. Please try again in 5 minutes")
                                 Log.e(TAG, e.toString())
@@ -110,7 +115,7 @@ class MainViewModel: ViewModel() {
                     } else {
                         Log.e(TAG, "loginResponseError = ${response.errorBody()}")
                     }
-                    isUpdating.value = false
+
                 }
             })
 
@@ -155,16 +160,18 @@ class MainViewModel: ViewModel() {
                         Log.d(TAG, "response string = $responseString")
 
                         if (responseString == "successfully registered") {
-                            registerListener?.onSuccess("Register success")
+                            registerListener?.onSuccess("Register success!")
                             registerResult.value = true
                         } else {
                             registerListener?.onFailure("Register failed.\nEmail already exists.")
                         }
 
+                        isUpdating.value = false
+
                     } else {
                         Log.e(TAG, "User register response failure")
                     }
-                    isUpdating.value = false
+
 
                 }
 
