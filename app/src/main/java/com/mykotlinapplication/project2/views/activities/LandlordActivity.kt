@@ -3,19 +3,15 @@ package com.mykotlinapplication.project2.views.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.ActivityLandlordBinding
 import com.mykotlinapplication.project2.helpers.LandlordHelper
-import com.mykotlinapplication.project2.models.Property
-import com.mykotlinapplication.project2.models.Tenant
 import com.mykotlinapplication.project2.viewmodels.LandlordViewModel
 import com.mykotlinapplication.project2.views.fragments.*
 
@@ -72,13 +68,14 @@ class LandlordActivity : AppCompatActivity(), LandlordHelper {
 
     override fun deleteProperty() {
         val builder = AlertDialog.Builder(this).apply {
-            setTitle("Delete Property")
+            setTitle("Delete LandlordProperty")
             setMessage("Are you sure you want to this property?")
             setPositiveButton("Yes") {dialog, which ->
                 viewModel.deleteProperty().observe(this@LandlordActivity, Observer { isSuccess ->
                     if (isSuccess) {
-                        Toast.makeText(this@LandlordActivity, "Property is deleted!", Toast.LENGTH_SHORT).show()
-                        viewModel.deleteSuccessProperty()
+                        viewModel.updatePropertyList()
+                        Toast.makeText(this@LandlordActivity, "LandlordProperty is deleted!", Toast.LENGTH_SHORT).show()
+//                        viewModel.deleteSuccessProperty()
                     } else {
                         Toast.makeText(this@LandlordActivity, "Fail to delete property. Please try again!", Toast.LENGTH_SHORT).show()
                     }

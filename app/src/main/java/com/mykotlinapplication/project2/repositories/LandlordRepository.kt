@@ -1,29 +1,18 @@
 package com.mykotlinapplication.project2.repositories
 
-import android.content.SharedPreferences
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
 import com.mykotlinapplication.project2.models.ApiClient
-import com.mykotlinapplication.project2.models.Property
+import com.mykotlinapplication.project2.models.LandlordProperty
 import com.mykotlinapplication.project2.models.SharedPreferencesManager
 import com.mykotlinapplication.project2.models.Tenant
-import io.reactivex.Single
-import io.reactivex.SingleObserver
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import okhttp3.ResponseBody
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Exception
-import kotlin.time.measureTime
 
 object LandlordRepository {
 
@@ -33,8 +22,8 @@ object LandlordRepository {
     private val isUpdating = MutableLiveData<Boolean>()
     private val testingId = "3"
 
-    fun getProperty(): MutableLiveData<ArrayList<Property>> {
-        var propertyList = MutableLiveData<ArrayList<Property>>()
+    fun getProperty(): MutableLiveData<ArrayList<LandlordProperty>> {
+        var propertyList = MutableLiveData<ArrayList<LandlordProperty>>()
         isUpdating.value = true
 
         apiInterface.getLandlordProperty(testingId, sharedPreferences.getUserType()).enqueue(object: retrofit2.Callback<JsonElement> {
@@ -53,12 +42,12 @@ object LandlordRepository {
                             val responseJsonObject = response.body()!!.asJsonObject
                             val propertyJsonArray = responseJsonObject.getAsJsonArray("Property")
 
-                            val propertyArray = arrayListOf<Property>()
+                            val propertyArray = arrayListOf<LandlordProperty>()
                             for (i in 0 until propertyJsonArray.size()) {
                                 var property = propertyJsonArray[i].asJsonObject
 
                                 var gson = Gson()
-                                propertyArray.add(gson.fromJson(property, Property::class.java))
+                                propertyArray.add(gson.fromJson(property, LandlordProperty::class.java))
 
 //                                var id = property["id"].asString
 //                                var address = property["propertyaddress"].asString.capitalize()
@@ -69,8 +58,8 @@ object LandlordRepository {
 //                                var price = property["propertypurchaseprice"].asString
 //                                var mortgageInfo = property["propertymortageinfo"].asString.capitalize()
 //
-//                                propertyArray.add(Property(id, address, city, state, country, status, price, mortgageInfo))
-//                                Log.i(TAG, "${Property(id, address, city, state, country, status, price)}")
+//                                propertyArray.add(LandlordProperty(id, address, city, state, country, status, price, mortgageInfo))
+//                                Log.i(TAG, "${LandlordProperty(id, address, city, state, country, status, price)}")
                             }
 
                             propertyList.value = propertyArray
@@ -228,51 +217,47 @@ object LandlordRepository {
         return tenants
     }
 
-    fun addTenant(name: String, email: String, address: String, phone: String, propertyId: String): Single<ResponseBody> {
-        return apiInterface.addTenant(name, email, address, phone, propertyId, testingId)
+    fun addTenant(name: String, email: String, address: String, phone: String, propertyId: String): MutableLiveData<Boolean> {
+        var isSuccess = MutableLiveData<Boolean>()
+
+        isUpdating.value = true
+        apiInterface.addTenant(name, email, address, phone, propertyId, testingId).enqueue(object: Callback<ResponseBody> {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e(TAG, "addTenant() onFailure: $t")
+            }
+
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    try {
+                        val responseString = response.body()!!.string()
+                        Log.d(TAG, responseString)
+
+                        if ("successfully added".equals(responseString)) {
+                            isSuccess.value = true
+                            Log.d(TAG, "isSuccess = ${isSuccess.value}")
+                        } else {
+                            isSuccess.value = false
+                        }
+
+                    } catch (e: Exception) {
+                        Log.e(TAG, "addTenant() convert response failure!: $e ")
+                    }
+                    isUpdating.value = false
+                } else {
+                    Log.e(TAG, "addTenant() response failure: ${response.errorBody()}")
+                }
+
+            }
+
+        })
+        return isSuccess
     }
 
-//    fun addTenant(name: String, email: String, address: String, phone: String, propertyId: String): MutableLiveData<Boolean> {
-//        var isSuccess = MutableLiveData<Boolean>()
-//
-//        isUpdating.value = true
-//        apiInterface.addTenant(name, email, address, phone, propertyId, testingId).enqueue(object: Callback<ResponseBody> {
-//            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-//                Log.e(TAG, "addTenant() onFailure: $t")
-//            }
-//
-//            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-//                if (response.isSuccessful) {
-//                    try {
-//                        val responseString = response.body()!!.string()
-//                        Log.d(TAG, responseString)
-//
-//                        if ("successfully added".equals(responseString)) {
-//                            isSuccess.value = true
-//                            Log.d(TAG, "isSuccess = ${isSuccess.value}")
-//                        } else {
-//                            isSuccess.value = false
-//                        }
-//
-//                    } catch (e: Exception) {
-//                        Log.e(TAG, "addTenant() convert response failure!: $e ")
-//                    }
-//                    isUpdating.value = false
-//                } else {
-//                    Log.e(TAG, "addTenant() response failure: ${response.errorBody()}")
-//                }
-//
-//            }
-//
-//        })
-//        return  isSuccess
-//    }
+    fun getUserEmailAndType(): MutableLiveData<Pair<String, String>> {
+        var userInfo = MutableLiveData<Pair<String, String>>()
+        userInfo.value = Pair(sharedPreferences.getUserEmail(), sharedPreferences.getUserType())
 
-    fun getUserEmail(): MutableLiveData<String> {
-        var userEmail = MutableLiveData<String>()
-        userEmail.value = sharedPreferences.getUserEmail()
-
-        return userEmail
+        return userInfo
     }
 
     fun clearLoginSession() {

@@ -1,18 +1,15 @@
 package com.mykotlinapplication.project2.views.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.GalleryItemBinding
-import com.mykotlinapplication.project2.models.Property
+import com.mykotlinapplication.project2.models.LandlordProperty
 import com.mykotlinapplication.project2.views.activities.LandlordActivity
 
-class PropertyListAdapter(var items: ArrayList<Property>): RecyclerView.Adapter<PropertyListAdapter.PropertyViewHolder>(){
+class PropertyListAdapter(var items: ArrayList<LandlordProperty>): RecyclerView.Adapter<PropertyListAdapter.PropertyViewHolder>(){
 
     private val TAG = "PropertyListAdapter"
     private lateinit var binding: GalleryItemBinding
@@ -39,7 +36,7 @@ class PropertyListAdapter(var items: ArrayList<Property>): RecyclerView.Adapter<
 
     }
 
-    fun setData(data: ArrayList<Property>) {
+    fun setData(data: ArrayList<LandlordProperty>) {
         items = data
         notifyDataSetChanged()
     }

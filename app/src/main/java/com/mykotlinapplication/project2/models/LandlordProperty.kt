@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Property(
+data class LandlordProperty(
     @SerializedName("id") var id: String,
     @SerializedName("propertyaddress") var address: String,
     @SerializedName("propertycity") var city: String,

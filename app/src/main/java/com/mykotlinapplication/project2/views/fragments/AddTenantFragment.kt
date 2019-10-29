@@ -42,9 +42,7 @@ class AddTenantFragment: Fragment(), AddTenantListener {
                 landlordActivity.viewModel.addTenant(name, phone, email, address, city, state, postcode, selectedProperty.id).observe(landlordActivity,
                     Observer { isSuccess ->
                         if (isSuccess) {
-//                            landlordActivity.viewModel.addPendingTenant()
                             onSuccess()
-//
                             landlordActivity.supportFragmentManager.popBackStack()
                             landlordActivity.goToPropertyDetails()
                         } else {

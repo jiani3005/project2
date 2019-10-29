@@ -29,13 +29,24 @@ class TenantListAdapter (var items: ArrayList<Tenant>): RecyclerView.Adapter<Ten
     }
 
     override fun onBindViewHolder(holder: TenantViewHolder, position: Int) {
-        holder.name.text = items[position].name
-        holder.address.text = items[position].address
+        holder.name.text = capitalizeEachWord(items[position].name)
+        holder.address.text = capitalizeEachWord(items[position].address)
     }
 
     fun setData(data: ArrayList<Tenant>) {
         items = data
         notifyDataSetChanged()
+    }
+
+    private fun capitalizeEachWord(string: String): String {
+        var inputList = string.split(" ")
+        var outputString = ""
+
+        for (e in inputList) {
+            outputString += e.capitalize() + " "
+        }
+
+        return outputString.trim()
     }
 
     inner class TenantViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener {

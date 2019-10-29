@@ -52,7 +52,7 @@ class AddPropertyFragment: Fragment(), AddPropertyListener {
                 Observer { isSuccess ->
                     if (isSuccess) {
                         onSuccess()
-                        landlordActivity.viewModel.addPendingProperty()
+//                        landlordActivity.viewModel.addPendingProperty()
                         landlordActivity.supportFragmentManager.popBackStack()
                         landlordActivity.goToProperty()
                     } else {

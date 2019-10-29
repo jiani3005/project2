@@ -41,7 +41,7 @@ interface ApiInterface {
     @GET("pro_mgt_add_tenants.php")
     fun addTenant(@Query("name") name: String, @Query("email") email: String, @Query("address") address: String,
                   @Query("mobile") phone: String, @Query("propertyid") propertyId: String,
-                  @Query("landlordid") landlordId: String): Single<ResponseBody>
+                  @Query("landlordid") landlordId: String): Call<ResponseBody>
 
     @GET("remove-property.php")
     fun deleteProperty(@Query("propertyid") propertyId: String): Call<JsonElement>

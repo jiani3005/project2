@@ -4,7 +4,7 @@
 
     <item android:id="@+id/action_property_delete"
         android:enabled="true"
-        android:title="Delete property"
+        android:title="Delete landlordProperty"
         app:showAsAction="ifRoom" />
 
 </menu>

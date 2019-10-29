@@ -2,19 +2,16 @@ package com.mykotlinapplication.project2.views.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mykotlinapplication.project2.R
-import com.mykotlinapplication.project2.databinding.FragmentGalleryBinding
 import com.mykotlinapplication.project2.databinding.FragmentPropertyBinding
-import com.mykotlinapplication.project2.models.Property
+import com.mykotlinapplication.project2.models.LandlordProperty
 import com.mykotlinapplication.project2.views.activities.LandlordActivity
 import com.mykotlinapplication.project2.views.adapters.PropertyListAdapter
 
@@ -23,7 +20,7 @@ class PropertyFragment: Fragment() {
     private lateinit var binding: FragmentPropertyBinding
     private lateinit var landlordActivity: LandlordActivity
     private lateinit var propertyListAdapter: PropertyListAdapter
-    private var properties = arrayListOf<Property>()
+    private var properties = arrayListOf<LandlordProperty>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

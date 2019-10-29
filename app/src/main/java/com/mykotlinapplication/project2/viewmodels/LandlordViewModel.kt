@@ -8,20 +8,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mykotlinapplication.project2.MyApplication
-import com.mykotlinapplication.project2.models.ApiClient
-import com.mykotlinapplication.project2.models.Property
-import com.mykotlinapplication.project2.models.SharedPreferencesManager
+import com.mykotlinapplication.project2.models.LandlordProperty
 import com.mykotlinapplication.project2.models.Tenant
 import com.mykotlinapplication.project2.repositories.LandlordRepository
 import com.mykotlinapplication.project2.utilities.AddPropertyListener
 import com.mykotlinapplication.project2.utilities.AddTenantListener
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import java.lang.Exception
-import androidx.databinding.adapters.NumberPickerBindingAdapter.setValue
-import android.R.attr.password
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import com.google.android.gms.maps.model.LatLng
 
 
@@ -31,26 +23,23 @@ class LandlordViewModel: ViewModel() {
     private val repo = LandlordRepository
     var addPropertyListener: AddPropertyListener? = null
     var addTenantListener: AddTenantListener? = null
-    private var compositeDisposable = CompositeDisposable()
 
     private var isUpdating = repo.getIsUpdating()
     private var property_list = repo.getProperty()
     private var tenant_list = repo.getTenants()
-    private var selectedProperty = MutableLiveData<Property>()
+    private var selectedProperty = MutableLiveData<LandlordProperty>()
     private var selectedTenant = MutableLiveData<Tenant>()
-    private var pendingProperty = MutableLiveData<Property>()
-    private var pendingTenant = MutableLiveData<Tenant>()
 //    private val propertyList = LandlordRepository.getProperty()
 
     fun clearLoginSession() {
         LandlordRepository.clearLoginSession()
     }
 
-    fun setSelectedProperty(property: Property) {
-        selectedProperty.value = property
+    fun setSelectedProperty(landlordProperty: LandlordProperty) {
+        selectedProperty.value = landlordProperty
     }
 
-    fun getSelectedProperty(): LiveData<Property> {
+    fun getSelectedProperty(): LiveData<LandlordProperty> {
         return selectedProperty
     }
 
@@ -62,10 +51,9 @@ class LandlordViewModel: ViewModel() {
         return selectedTenant
     }
 
-    fun getProperty(): LiveData<ArrayList<Property>> {
-        if (property_list.value == null) {
-            property_list.postValue(repo.getProperty().value)
-        }
+    fun getProperty(): LiveData<ArrayList<LandlordProperty>> {
+        property_list.value = arrayListOf()
+        property_list = repo.getProperty()
 
         return property_list
     }
@@ -106,8 +94,7 @@ class LandlordViewModel: ViewModel() {
                 longitude = geocoderMatches[0].longitude.toString()
 //                Log.d(TAG, "latitude = $latitude\nlongitude = $longitude")
             }
-
-            pendingProperty.value = Property("", address, city, state, country, property_status, price, mortgageInfo)
+            isUpdating = repo.getIsUpdating()
             isSuccess = repo.addProperty(address, city, state, country, property_status, price, mortgageInfo, latitude, longitude)
 
         }
@@ -115,19 +102,11 @@ class LandlordViewModel: ViewModel() {
         return isSuccess
     }
 
-    fun addPendingProperty() {
-        isUpdating.value = true
-        var propertyArray = property_list.value!!
-        propertyArray.add(pendingProperty.value!!)
-        property_list.postValue(propertyArray)
-        isUpdating.value = false
-    }
-
     fun deleteProperty(): LiveData<Boolean> {
         return repo.deleteProperty(selectedProperty.value!!.id)
     }
 
-    fun deleteSuccessProperty() {
+    fun updatePropertyList() {
         var propertyArray = property_list.value!!
         val index = propertyArray.indexOf(selectedProperty.value!!)
         propertyArray.removeAt(index)
@@ -136,9 +115,8 @@ class LandlordViewModel: ViewModel() {
     }
 
     fun getTenants(): LiveData<ArrayList<Tenant>> {
-        if (tenant_list.value == null) {
-            tenant_list.postValue(repo.getTenants().value)
-        }
+        tenant_list.value = arrayListOf()
+        tenant_list = repo.getTenants()
 
         return tenant_list
     }
@@ -169,29 +147,25 @@ class LandlordViewModel: ViewModel() {
         } else {
             var fullAddress = "${capitalizeEachWord(address)}\n${capitalizeEachWord(city)}, ${state.toUpperCase()} $postcode"
 
-//            isSuccess = repo.addTenant(capitalizeEachWord(name), email, fullAddress, phone, propertyId)
-            compositeDisposable.add(repo.addTenant(capitalizeEachWord(name), email, fullAddress, phone, propertyId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({ d -> isUpdating.value = true })
-                .subscribe(
-                    { response ->
-                        Log.d(TAG, "response.body() = ${response.string()}")
-                        try {
-                            if (response.string().toString().equals("successfully added")) {
-                                isSuccess.value = true
-                                Log.i(TAG, "isSuccess = ${isSuccess.value}")
-                            } else {
-                                isSuccess.value = false
-                            }
-
-                        } catch (e: Exception) {
-                            Log.e(TAG, "addTenant() error: $e")
-                        }
-
-                    },
-                    { throwable -> Log.e(TAG, "addTenant() throwable: $throwable") }
-                ))
+            isUpdating = repo.getIsUpdating()
+            isSuccess = repo.addTenant(capitalizeEachWord(name), email, fullAddress, phone, propertyId)
+//            compositeDisposable.add(repo.addTenant(capitalizeEachWord(name), email, fullAddress, phone, propertyId)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .doOnSubscribe({ d -> isUpdating.value = true })
+//                .subscribe(
+//                    { response ->
+//                        val responseString = response.string()
+//                        Log.d(TAG, "LandlordProperty ID# $propertyId, response.body() = $responseString")
+//                        try {
+//                            isSuccess.value = responseString.equals("successfully added")
+//                        } catch (e: Exception) {
+//                            Log.e(TAG, "addTenant() error: $e")
+//                        }
+//
+//                    },
+//                    { throwable -> Log.e(TAG, "addTenant() throwable: $throwable") }
+//                ))
 
 
         }
@@ -199,24 +173,18 @@ class LandlordViewModel: ViewModel() {
         return isSuccess
     }
 
-    fun addPendingTenant() {
-//        isUpdating.value = true
-        var tenantArray = tenant_list.value!!
-        tenantArray.add(pendingTenant.value!!)
-//        isUpdating.value = false
-    }
-
-    fun getUserEmail(): LiveData<String> {
-        return repo.getUserEmail()
+    fun getUserEmail(): LiveData<Pair<String, String>> {
+        return repo.getUserEmailAndType()
     }
 
     fun getIsUpdating(): LiveData<Boolean> {
-        return repo.getIsUpdating()
+        return isUpdating
     }
 
-    fun getLocationsCoordinates(): LiveData<ArrayList<Triple<Property, String, LatLng>>> {
-        var result = MutableLiveData<ArrayList<Triple<Property, String, LatLng>>>()
-        var latLngList = arrayListOf<Triple<Property, String, LatLng>>()
+    fun getLocationsCoordinates(): LiveData<ArrayList<Triple<LandlordProperty, String, LatLng>>> {
+        var result = MutableLiveData<ArrayList<Triple<LandlordProperty, String, LatLng>>>()
+        var latLngList = arrayListOf<Triple<LandlordProperty, String, LatLng>>()
+
 
         for (e in property_list.value!!) {
 //            var latitude = ""
@@ -230,7 +198,7 @@ class LandlordViewModel: ViewModel() {
                 fullAddress = "${e.address}, ${e.city}, ${e.state} ${e.country}"
                 geocoderMatches = Geocoder(MyApplication.context).getFromLocationName(fullAddress, 1)
             } catch (e: Exception) {
-                Log.e(TAG, e.toString())
+                Log.e(TAG, "geomatcher failed: $e")
             }
 
             if (geocoderMatches != null) {

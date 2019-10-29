@@ -2,17 +2,14 @@ package com.mykotlinapplication.project2.views.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.FragmentListingDetailBinding
-import com.mykotlinapplication.project2.models.Property
 import com.mykotlinapplication.project2.views.activities.LandlordActivity
 
 class PropertyDetailsFragment: Fragment() {
@@ -31,7 +28,7 @@ class PropertyDetailsFragment: Fragment() {
         binding.textViewAddTenant.visibility = View.VISIBLE
         landlordActivity.editAppBar("Property Details", true)
 
-//        val property: Property = arguments?.getParcelable("property")!!
+//        val property: LandlordProperty = arguments?.getParcelable("property")!!
 
         landlordActivity.viewModel.getSelectedProperty().observe(landlordActivity, Observer { selectedProperty ->
             binding.textViewAddress.text = "${capitalizeEachWord(selectedProperty.address)}\n${capitalizeEachWord(selectedProperty.city)}, ${selectedProperty.state.toUpperCase()} ${selectedProperty.country}"
@@ -40,7 +37,7 @@ class PropertyDetailsFragment: Fragment() {
             binding.textViewDescription.text = "Mortgage Info: ${selectedProperty.mortgageInfo.capitalize()}"
 
             binding.textViewAddTenant.setOnClickListener {
-//                Toast.makeText(landlordActivity, "Property ID = ${selectedProperty.id}", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(landlordActivity, "LandlordProperty ID = ${selectedProperty.id}", Toast.LENGTH_SHORT).show()
                 landlordActivity.goToAddTenant()
             }
         })
