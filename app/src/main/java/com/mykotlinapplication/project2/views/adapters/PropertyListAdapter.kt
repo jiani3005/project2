@@ -34,7 +34,7 @@ class PropertyListAdapter(var items: ArrayList<Property>): RecyclerView.Adapter<
 
         holder.price.text = "$ ${items[position].price}"
 
-        holder.address.text = "${items[position].address}\n${items[position].city}, ${items[position].state} ${items[position].country}"
+        holder.address.text = "${capitalizeEachWord(items[position].address)}\n${capitalizeEachWord(items[position].city)}, ${items[position].state.capitalize()} ${items[position].country}"
 
 
     }
@@ -42,6 +42,17 @@ class PropertyListAdapter(var items: ArrayList<Property>): RecyclerView.Adapter<
     fun setData(data: ArrayList<Property>) {
         items = data
         notifyDataSetChanged()
+    }
+
+    private fun capitalizeEachWord(string: String): String {
+        var inputList = string.split(" ")
+        var outputString = ""
+
+        for (e in inputList) {
+            outputString += e.capitalize() + " "
+        }
+
+        return outputString.trim()
     }
 
 

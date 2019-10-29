@@ -38,7 +38,6 @@ class TenantListAdapter (var items: ArrayList<Tenant>): RecyclerView.Adapter<Ten
         notifyDataSetChanged()
     }
 
-
     inner class TenantViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         val name = binding.textViewName

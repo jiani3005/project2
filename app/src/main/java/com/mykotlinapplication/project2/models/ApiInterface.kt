@@ -1,6 +1,9 @@
 package com.mykotlinapplication.project2.models
 
 import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import io.reactivex.Observable
+import io.reactivex.Single
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
@@ -38,9 +41,9 @@ interface ApiInterface {
     @GET("pro_mgt_add_tenants.php")
     fun addTenant(@Query("name") name: String, @Query("email") email: String, @Query("address") address: String,
                   @Query("mobile") phone: String, @Query("propertyid") propertyId: String,
-                  @Query("landlordid") landlordId: String): Call<ResponseBody>
+                  @Query("landlordid") landlordId: String): Single<ResponseBody>
 
-    @GET("remove-property.php?")
+    @GET("remove-property.php")
     fun deleteProperty(@Query("propertyid") propertyId: String): Call<JsonElement>
 
 }

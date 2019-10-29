@@ -34,11 +34,10 @@ class PropertyDetailsFragment: Fragment() {
 //        val property: Property = arguments?.getParcelable("property")!!
 
         landlordActivity.viewModel.getSelectedProperty().observe(landlordActivity, Observer { selectedProperty ->
-            binding.textViewAddress.text = "${selectedProperty.address}\n${selectedProperty.city}, ${selectedProperty.state} ${selectedProperty.country}"
+            binding.textViewAddress.text = "${capitalizeEachWord(selectedProperty.address)}\n${capitalizeEachWord(selectedProperty.city)}, ${selectedProperty.state.toUpperCase()} ${selectedProperty.country}"
             binding.textViewPrice.text = "$ ${selectedProperty.price}"
-            binding.textViewPropertyID.text = "Property ID: #${selectedProperty.id}"
-            binding.textViewStatus.text = "Status: ${selectedProperty.status}"
-            binding.textViewDescription.text = "Mortgage Info: ${selectedProperty.mortgageInfo}"
+            binding.textViewStatus.text = "Status: ${selectedProperty.status.capitalize()}"
+            binding.textViewDescription.text = "Mortgage Info: ${selectedProperty.mortgageInfo.capitalize()}"
 
             binding.textViewAddTenant.setOnClickListener {
 //                Toast.makeText(landlordActivity, "Property ID = ${selectedProperty.id}", Toast.LENGTH_SHORT).show()
@@ -52,6 +51,17 @@ class PropertyDetailsFragment: Fragment() {
 
 
         return binding.root
+    }
+
+    private fun capitalizeEachWord(string: String): String {
+        var inputList = string.split(" ")
+        var outputString = ""
+
+        for (e in inputList) {
+            outputString += e.capitalize() + " "
+        }
+
+        return outputString.trim()
     }
 
 }

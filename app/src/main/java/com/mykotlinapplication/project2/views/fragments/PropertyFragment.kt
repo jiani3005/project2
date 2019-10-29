@@ -50,8 +50,10 @@ class PropertyFragment: Fragment() {
         })
 
         landlordActivity.viewModel.getProperty().observe(landlordActivity, Observer {propertyList ->
-            properties = propertyList
-            propertyListAdapter.setData(propertyList)
+            if (propertyList != null) {
+                properties = propertyList
+                propertyListAdapter.setData(propertyList)
+            }
         })
 
 

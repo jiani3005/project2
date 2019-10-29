@@ -30,12 +30,24 @@ class TenantDetailsFragment: Fragment() {
 //        val tenant= arguments?.getParcelable<Tenant>("tenant")!!
 
         landlordActivity.viewModel.getSelectedTenant().observe(landlordActivity, Observer { selectedTenant ->
-            binding.textViewName.text = selectedTenant.name
+            binding.textViewName.text = capitalizeEachWord(selectedTenant.name)
             binding.textViewPhone.text = selectedTenant.phone
             binding.textViewEmail.text = selectedTenant.email
-            binding.textViewAddress.text = selectedTenant.address
+            binding.textViewAddress.text = capitalizeEachWord(selectedTenant.address)
         })
 
         return binding.root
     }
+
+    private fun capitalizeEachWord(string: String): String {
+        var inputList = string.split(" ")
+        var outputString = ""
+
+        for (e in inputList) {
+            outputString += e.capitalize() + " "
+        }
+
+        return outputString.trim()
+    }
+
 }
