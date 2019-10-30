@@ -23,7 +23,7 @@ interface ApiInterface {
                      @Query("password") password: String, @Query("account_for") accountFor: String): Call<ResponseBody>
 
     @GET("pro_mgt_forgot_pass.php")
-    fun userForgotPassword(@Query("email") email: String): Call<JsonElement>
+    fun userForgotPassword(@Query("email") email: String): Single<JsonElement>
 
     @GET("property.php")
     fun getLandlordProperty(@Query("userid") userId: String, @Query("usertype") userType: String): Call<JsonElement>

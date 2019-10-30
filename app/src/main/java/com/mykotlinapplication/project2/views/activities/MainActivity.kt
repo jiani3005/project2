@@ -1,5 +1,9 @@
 package com.mykotlinapplication.project2.views.activities
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -7,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.mykotlinapplication.project2.R
@@ -62,6 +67,31 @@ class MainActivity : AppCompatActivity(), MainHelper {
 
     override fun goToLandlordActivity() {
         startActivity(Intent(this, LandlordActivity::class.java))
+    }
+
+    override fun setUpNotification() {
+        val channel = NotificationChannel("AvantGarde", "AvantGarde", NotificationManager.IMPORTANCE_DEFAULT)
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+
+        var userInfo  = viewModel.getForgotPasswordInfo()
+
+        val intent = Intent(this, PasswordRecoveryActivity::class.java).apply {
+            putExtra("email", userInfo.first)
+            putExtra("password", userInfo.second)
+        }
+        val pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        var builder = Notification.Builder(this, channel.id).apply {
+            setChannelId(channel.id)
+            setContentTitle("Avant Garde")
+            setContentText("Click here to retrieve the password.")
+            setSmallIcon(R.drawable.notifications)
+            setContentIntent(pendingIntent)
+            setAutoCancel(true)
+        }
+        notificationManager.notify(1, builder.build())
     }
 
     override fun onBackPressed() {

@@ -5,14 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.JsonElement
 import com.mykotlinapplication.project2.models.ApiClient
 import com.mykotlinapplication.project2.models.SharedPreferencesManager
+import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 
 object MainRepository {
 
-    private val TAG = "MainRepository"
+    private const val TAG = "MainRepository"
     private val sharedPreferences = SharedPreferencesManager
     private val apiInterface = ApiClient.getApiInterface()
     private val isUpdating = MutableLiveData<Boolean>()
@@ -74,55 +76,8 @@ object MainRepository {
         return isSuccess
     }
 
-    fun userForgotPassword(email: String): MutableLiveData<String> {
-        var result = MutableLiveData<String>()
-
-        isUpdating.value = true
-        apiInterface.userForgotPassword(email).enqueue(object: retrofit2.Callback<JsonElement> {
-            override fun onFailure(call: Call<JsonElement>, t: Throwable) {
-                Log.e(TAG, "userForgotPassword() onFailure: $t")
-                result.value = "false"
-            }
-
-            override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
-
-                if (response.isSuccessful) {
-
-                    if (response.body()!!.isJsonObject) {
-                        val responseJSONObject = response.body()!!.asJsonObject
-
-                        Log.d(TAG, "response body = $responseJSONObject")
-
-                        try {
-                            if (responseJSONObject.get("msg").asString == "User Email and Password") {
-                                val userEmail = responseJSONObject.get("useremail").asString
-                                val password = responseJSONObject.get("userpassword").asString
-
-                                result.value = "$userEmail\n$password"
-
-                            } else {
-                                result.value = "false"
-//                                forgotPasswordListener?.onFailure("Email is not registered.")
-                            }
-
-                        } catch (e: Exception) {
-                            Log.e(TAG, "response exception: $e")
-                        }
-                    } else {
-                        Log.e(TAG, "response is not JsonObject")
-                    }
-
-                } else {
-                    Log.e(TAG, "ForgotPassword response failure")
-                }
-
-                isUpdating.value = false
-
-            }
-
-        })
-
-        return result
+    fun userForgotPassword(email: String): Single<JsonElement> {
+        return apiInterface.userForgotPassword(email)
     }
 
     fun userLogin(email: String, password: String): MutableLiveData<Map<String, String>> {
@@ -209,4 +164,5 @@ object MainRepository {
     fun getIsUpdating(): MutableLiveData<Boolean> {
         return isUpdating
     }
+
 }

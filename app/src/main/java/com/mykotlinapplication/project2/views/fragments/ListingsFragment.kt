@@ -30,7 +30,7 @@ class ListingsFragment: Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_gallery, container, false)
-        tenantActivity.editAppBar("Listings", false)
+        tenantActivity.editAppBar("Property", false)
         initListingsRecyclerView()
 
         tenantActivity.viewModel.getIsUpdating().observe(tenantActivity, Observer { isUpdating ->

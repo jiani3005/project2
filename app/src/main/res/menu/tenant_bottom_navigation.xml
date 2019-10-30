@@ -4,8 +4,8 @@
 
     <item android:id="@+id/action_tenant_listings"
         android:enabled="true"
-        android:icon="@drawable/listings"
-        android:title="Listings"
+        android:icon="@drawable/property"
+        android:title="Property"
         app:showAsAction="ifRoom" />
 
     <item android:id="@+id/action_tenant_map"
