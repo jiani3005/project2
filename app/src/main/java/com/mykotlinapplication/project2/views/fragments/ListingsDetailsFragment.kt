@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.FragmentListingDetailBinding
 import com.mykotlinapplication.project2.databinding.FragmentMapBinding
@@ -26,8 +27,26 @@ class ListingsDetailsFragment: Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_listing_detail, container, false)
         tenantActivity.editAppBar("Property Details", true)
 
+        tenantActivity.viewModel.getSelectedListings().observe(tenantActivity, Observer { selectedListings ->
+            binding.textViewAddress.text = "${capitalizeEachWord(selectedListings.address)}\n${capitalizeEachWord(selectedListings.city)}, ${selectedListings.state.toUpperCase()} ${selectedListings.postcode}"
+            binding.textViewPrice.text = "$ ${selectedListings.price}"
+            binding.textViewStatus.text = "Status: ${selectedListings.propertyStatus.capitalize()}"
+            binding.textViewDescription.text = "Mortgage Info: ${selectedListings.mortgageInfo.capitalize()}"
+
+        })
 
 
         return binding.root
+    }
+
+    private fun capitalizeEachWord(string: String): String {
+        var inputList = string.split(" ")
+        var outputString = ""
+
+        for (e in inputList) {
+            outputString += e.capitalize() + " "
+        }
+
+        return outputString.trim()
     }
 }

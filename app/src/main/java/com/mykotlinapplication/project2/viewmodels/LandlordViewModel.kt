@@ -29,7 +29,6 @@ class LandlordViewModel: ViewModel() {
     private var tenant_list = repo.getTenants()
     private var selectedProperty = MutableLiveData<LandlordProperty>()
     private var selectedTenant = MutableLiveData<Tenant>()
-//    private val propertyList = LandlordRepository.getProperty()
 
     fun clearLoginSession() {
         LandlordRepository.clearLoginSession()
@@ -78,6 +77,8 @@ class LandlordViewModel: ViewModel() {
         } else if (mortgageInfo.isNullOrEmpty()) {
             addPropertyListener?.setMortgageInfoError()
         } else {
+            isUpdating = repo.getIsUpdating()
+
             var latitude = ""
             var longitude = ""
             var geocoderMatches: List<Address>? = null
@@ -103,6 +104,7 @@ class LandlordViewModel: ViewModel() {
     }
 
     fun deleteProperty(): LiveData<Boolean> {
+        isUpdating = repo.getIsUpdating()
         return repo.deleteProperty(selectedProperty.value!!.id)
     }
 
@@ -185,6 +187,7 @@ class LandlordViewModel: ViewModel() {
         var result = MutableLiveData<ArrayList<Triple<LandlordProperty, String, LatLng>>>()
         var latLngList = arrayListOf<Triple<LandlordProperty, String, LatLng>>()
 
+        isUpdating.value = true
 
         for (e in property_list.value!!) {
 //            var latitude = ""
@@ -208,6 +211,7 @@ class LandlordViewModel: ViewModel() {
             }
         }
         result.value = latLngList
+        isUpdating.value = false
 
         return result
     }

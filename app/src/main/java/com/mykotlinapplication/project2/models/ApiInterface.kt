@@ -46,4 +46,7 @@ interface ApiInterface {
     @GET("remove-property.php")
     fun deleteProperty(@Query("propertyid") propertyId: String): Call<JsonElement>
 
+    @GET("pro_mgt_property_all.php")
+    fun getListings(): Call<ListingsPropertyList>
+
 }

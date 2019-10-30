@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.FragmentProfileBinding
 import com.mykotlinapplication.project2.views.activities.TenantActivity
@@ -25,6 +26,11 @@ class TenantProfileFragment: Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
         tenantActivity.editAppBar("Profile", true)
 
+        tenantActivity.viewModel.getUserEmailAndType().observe(tenantActivity, Observer { info ->
+            binding.textViewEmail.text = capitalizeEachWord(info.first)
+            binding.textViewEmail.text = info.second.capitalize()
+        })
+
 
         binding.buttonLogout.setOnClickListener {
             tenantActivity.viewModel.clearLoginSession()
@@ -32,5 +38,16 @@ class TenantProfileFragment: Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun capitalizeEachWord(string: String): String {
+        var inputList = string.split(" ")
+        var outputString = ""
+
+        for (e in inputList) {
+            outputString += e.capitalize() + " "
+        }
+
+        return outputString.trim()
     }
 }

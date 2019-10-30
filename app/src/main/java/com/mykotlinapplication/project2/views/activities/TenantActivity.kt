@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.mykotlinapplication.project2.R
@@ -70,5 +71,25 @@ class TenantActivity : AppCompatActivity(), TenantHelper {
 
     override fun goToMainActivity() {
         startActivity(Intent(this, MainActivity::class.java))
+    }
+
+    override fun onBackPressed() {
+//        if (supportFragmentManager.backStackEntryCount == 0) {
+            val builder = AlertDialog.Builder(this).apply {
+                setTitle("Exit Application")
+                setMessage("Do you want to exit current application?")
+                setPositiveButton("Yes") {dialog, which ->
+                    finishAffinity()
+                }
+                setNegativeButton("No") {dialog, which ->
+
+                }
+            }
+            builder.create().show()
+
+//        }
+//        else {
+//            super.onBackPressed()
+//        }
     }
 }

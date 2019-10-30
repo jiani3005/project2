@@ -19,11 +19,12 @@ import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.FragmentMapBinding
 import com.mykotlinapplication.project2.models.LandlordProperty
 import com.mykotlinapplication.project2.views.activities.LandlordActivity
+import com.mykotlinapplication.project2.views.adapters.MapInfoWindowAdapter
 import kotlinx.android.synthetic.main.property_map_info_content.view.*
 import kotlinx.android.synthetic.main.property_map_info_window.view.*
 
 class LandlordMapFragment: Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
-    GoogleMap.OnInfoWindowClickListener, GoogleMap.OnInfoWindowCloseListener {
+    GoogleMap.OnInfoWindowClickListener {
 
     private lateinit var binding: FragmentMapBinding
     private lateinit var landlordActivity: LandlordActivity
@@ -59,10 +60,9 @@ class LandlordMapFragment: Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerCli
         map = googleMap
 
         with(map) {
-            setInfoWindowAdapter(PropertyMapInfoWindowAdapter())
+            setInfoWindowAdapter(MapInfoWindowAdapter(this@LandlordMapFragment))
             setOnMarkerClickListener(this@LandlordMapFragment)
             setOnInfoWindowClickListener(this@LandlordMapFragment)
-            setOnInfoWindowCloseListener(this@LandlordMapFragment)
         }
 
 //        map.setInfoWindowAdapter(PropertyMapInfoWindowAdapter())
@@ -97,36 +97,32 @@ class LandlordMapFragment: Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerCli
         landlordActivity.goToPropertyDetails()
     }
 
-    override fun onInfoWindowClose(marker: Marker) {
-
-    }
-
-    inner class PropertyMapInfoWindowAdapter: GoogleMap.InfoWindowAdapter {
-
-        private val window: View = layoutInflater.inflate(R.layout.property_map_info_window, null)
-        private val contents: View = layoutInflater.inflate(R.layout.property_map_info_content, null)
-
-        override fun getInfoContents(marker: Marker): View? {
-            contents.tv_propertyContent_address.text = marker.title
-            contents.tv_propertyContent_moreInfo.setOnClickListener {
-                var item = marker.tag as Pair<LandlordProperty, String>
-                landlordActivity.viewModel.setSelectedProperty(item.first)
-                landlordActivity.goToPropertyDetails()
-            }
-            return contents
-        }
-
-        override fun getInfoWindow(marker: Marker): View? {
-            window.tv_propertyInfo_address.text = marker.title
-            window.tv_propertyInfo_moreInfo.setOnClickListener {
-                var item = marker.tag as Pair<LandlordProperty, String>
-                landlordActivity.viewModel.setSelectedProperty(item.first)
-                landlordActivity.goToPropertyDetails()
-            }
-
-            return null
-        }
-
-    }
+//    inner class PropertyMapInfoWindowAdapter: GoogleMap.InfoWindowAdapter {
+//
+//        private val window: View = layoutInflater.inflate(R.layout.property_map_info_window, null)
+//        private val contents: View = layoutInflater.inflate(R.layout.property_map_info_content, null)
+//
+//        override fun getInfoContents(marker: Marker): View? {
+//            contents.tv_propertyContent_address.text = marker.title
+//            contents.tv_propertyContent_moreInfo.setOnClickListener {
+//                var item = marker.tag as Pair<LandlordProperty, String>
+//                landlordActivity.viewModel.setSelectedProperty(item.first)
+//                landlordActivity.goToPropertyDetails()
+//            }
+//            return contents
+//        }
+//
+//        override fun getInfoWindow(marker: Marker): View? {
+//            window.tv_propertyInfo_address.text = marker.title
+//            window.tv_propertyInfo_moreInfo.setOnClickListener {
+//                var item = marker.tag as Pair<LandlordProperty, String>
+//                landlordActivity.viewModel.setSelectedProperty(item.first)
+//                landlordActivity.goToPropertyDetails()
+//            }
+//
+//            return null
+//        }
+//
+//    }
 
 }
