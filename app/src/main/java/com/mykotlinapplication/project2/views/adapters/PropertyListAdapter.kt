@@ -4,17 +4,19 @@ import android.content.Context
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.GalleryItemBinding
 import com.mykotlinapplication.project2.models.LandlordProperty
 import com.mykotlinapplication.project2.views.activities.LandlordActivity
+import java.lang.StringBuilder
+import kotlin.random.Random
 
 class PropertyListAdapter(var items: ArrayList<LandlordProperty>): RecyclerView.Adapter<PropertyListAdapter.PropertyViewHolder>(){
 
     private val TAG = "PropertyListAdapter"
     private lateinit var binding: GalleryItemBinding
     private lateinit var context: Context
-    private lateinit var propertyFragment: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PropertyViewHolder {
         binding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.gallery_item, parent, false)
@@ -28,12 +30,9 @@ class PropertyListAdapter(var items: ArrayList<LandlordProperty>): RecyclerView.
     }
 
     override fun onBindViewHolder(holder: PropertyViewHolder, position: Int) {
-
+        Glide.with(context).load(items[position].image).into(holder.image)
         holder.price.text = "$ ${items[position].price}"
-
         holder.address.text = "${capitalizeEachWord(items[position].address)}\n${capitalizeEachWord(items[position].city)}, ${items[position].state.capitalize()} ${items[position].country}"
-
-
     }
 
     fun setData(data: ArrayList<LandlordProperty>) {

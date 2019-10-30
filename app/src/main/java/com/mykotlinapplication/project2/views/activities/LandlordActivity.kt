@@ -68,8 +68,8 @@ class LandlordActivity : AppCompatActivity(), LandlordHelper {
 
     override fun deleteProperty() {
         val builder = AlertDialog.Builder(this).apply {
-            setTitle("Delete LandlordProperty")
-            setMessage("Are you sure you want to this property?")
+            setTitle("Delete Property")
+            setMessage("Are you sure you want to delete this property?")
             setPositiveButton("Yes") {dialog, which ->
                 viewModel.deleteProperty().observe(this@LandlordActivity, Observer { isSuccess ->
                     if (isSuccess) {
@@ -113,22 +113,17 @@ class LandlordActivity : AppCompatActivity(), LandlordHelper {
     }
 
     override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount == 0) {
-            val builder = AlertDialog.Builder(this).apply {
-                setTitle("Exit Application")
-                setMessage("Do you want to exit current application?")
-                setPositiveButton("Yes") {dialog, which ->
-                    finishAffinity()
-                }
-                setNegativeButton("No") {dialog, which ->
-
-                }
+        val builder = AlertDialog.Builder(this).apply {
+            setTitle("Exit Application")
+            setMessage("Do you want to exit current application?")
+            setPositiveButton("Yes") {dialog, which ->
+                finishAffinity()
             }
-            builder.create().show()
+            setNegativeButton("No") {dialog, which ->
 
-        } else {
-            super.onBackPressed()
+            }
         }
+        builder.create().show()
     }
 
 }

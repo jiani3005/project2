@@ -13,5 +13,6 @@ data class ListingsProperty (
     @SerializedName("propertymortageinfo") var mortgageInfo: String,
     @SerializedName("propertyuserid") var landlordId: String,
     @SerializedName("propertylatitude") var latitude: String,
-    @SerializedName("propertylongitude") var longitude: String
+    @SerializedName("propertylongitude") var longitude: String,
+    var image: String
 )

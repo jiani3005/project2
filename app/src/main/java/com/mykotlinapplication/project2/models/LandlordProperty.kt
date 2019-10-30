@@ -13,5 +13,6 @@ data class LandlordProperty(
     @SerializedName("propertycountry") var country: String,
     @SerializedName("propertystatus") var status: String,
     @SerializedName("propertypurchaseprice") var price: String,
-    @SerializedName("propertymortageinfo") var mortgageInfo: String
+    @SerializedName("propertymortageinfo") var mortgageInfo: String,
+    var image: String
 ): Parcelable

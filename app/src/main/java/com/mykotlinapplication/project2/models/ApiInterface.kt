@@ -47,6 +47,6 @@ interface ApiInterface {
     fun deleteProperty(@Query("propertyid") propertyId: String): Call<JsonElement>
 
     @GET("pro_mgt_property_all.php")
-    fun getListings(): Call<ListingsPropertyList>
+    fun getListings(): Single<ListingsPropertyList>
 
 }

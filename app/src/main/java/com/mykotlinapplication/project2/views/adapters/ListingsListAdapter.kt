@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.GalleryItemBinding
 import com.mykotlinapplication.project2.models.ListingsProperty
@@ -30,6 +31,7 @@ class ListingsListAdapter (var items: ArrayList<ListingsProperty>): RecyclerView
         var fullAddress = capitalizeEachWord(items[position].address) + "\n" + capitalizeEachWord(items[position].city) + ", " + items[position].state.toUpperCase() + " " + items[position].postcode
         holder.address.text = fullAddress
         holder.price.text = "$ " + items[position].price
+        Glide.with(context).load(items[position].image).into(holder.image)
     }
 
     fun setData(data: ArrayList<ListingsProperty>) {

@@ -2,14 +2,15 @@ package com.mykotlinapplication.project2.repositories
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.mykotlinapplication.project2.models.ApiClient
-import com.mykotlinapplication.project2.models.ListingsProperty
-import com.mykotlinapplication.project2.models.ListingsPropertyList
-import com.mykotlinapplication.project2.models.SharedPreferencesManager
+import com.mykotlinapplication.project2.models.*
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.random.Random
 
 object TenantRepository {
 
@@ -17,30 +18,58 @@ object TenantRepository {
     private val sharedPreferences = SharedPreferencesManager
     private val apiInterface = ApiClient.getApiInterface()
     private val isUpdating = MutableLiveData<Boolean>()
+    private val compositeDisposable = CompositeDisposable()
+    private val propertyImages = ImageDatabase.pictureList
 
 
     fun getListings(): MutableLiveData<ArrayList<ListingsProperty>> {
         isUpdating.value = true
         var propertyList = MutableLiveData<ArrayList<ListingsProperty>>()
+        var newList = arrayListOf<ListingsProperty>()
 
-        apiInterface.getListings().enqueue(object: Callback<ListingsPropertyList> {
-            override fun onFailure(call: Call<ListingsPropertyList>, t: Throwable) {
-                Log.e(TAG, "getListings() onFailure: $t")
-                isUpdating.value = false
-            }
+        compositeDisposable.add(apiInterface.getListings()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { list ->
+                    val propertyArray = list.listingsPropertyList
+                    for (e in propertyArray) {
+                        if (e.price != "" && e.address != "" && e.city != "" && e.state != "" && e.postcode != "") {
+                            if (e.price.matches("-?\\d+(\\.\\d+)?".toRegex())) {
+                                if (e.address.toLowerCase() != "abc" && e.city.toLowerCase() != "abc" && e.state.toLowerCase() != "abc" && e.postcode.toLowerCase() != "abc") {
+                                    e.image = propertyImages[Random.nextInt(propertyImages.size)]
+                                    newList.add(e)
+                                }
+                            }
 
-            override fun onResponse(call: Call<ListingsPropertyList>, response: Response<ListingsPropertyList>) {
-                if (response.isSuccessful) {
-                    var result = response.body()!!
-                    propertyList.value = result.listingsPropertyList
+                        }
+                    }
+                    propertyList.value = newList
                     isUpdating.value = false
-                } else {
-                    Log.e(TAG, "getListings() response failure: ${response.errorBody()}")
+                }, { throwable ->
+                    Log.e(TAG, "getListings() throwable: $throwable")
                     isUpdating.value = false
-                }
-            }
+                }))
 
-        })
+
+//        apiInterface.getListings().enqueue(object: Callback<ListingsPropertyList> {
+//            override fun onFailure(call: Call<ListingsPropertyList>, t: Throwable) {
+//                Log.e(TAG, "getListings() onFailure: $t")
+//                isUpdating.value = false
+//            }
+//
+//            override fun onResponse(call: Call<ListingsPropertyList>, response: Response<ListingsPropertyList>) {
+//                if (response.isSuccessful) {
+//                    var result = response.body()!!
+//                    propertyList.value = result.listingsPropertyList
+//                    isUpdating.value = false
+//                } else {
+//                    Log.e(TAG, "getListings() response failure: ${response.errorBody()}")
+//                    isUpdating.value = false
+//                }
+//            }
+//
+//        })
 
         return propertyList
     }

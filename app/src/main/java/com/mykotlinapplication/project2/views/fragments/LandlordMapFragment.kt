@@ -1,10 +1,16 @@
 package com.mykotlinapplication.project2.views.fragments
 
+import android.Manifest
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,6 +21,12 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.mykotlinapplication.project2.MyApplication
 import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.FragmentMapBinding
 import com.mykotlinapplication.project2.models.LandlordProperty
@@ -65,12 +77,8 @@ class LandlordMapFragment: Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerCli
             setOnInfoWindowClickListener(this@LandlordMapFragment)
         }
 
-//        map.setInfoWindowAdapter(PropertyMapInfoWindowAdapter())
-//        map.setOnMarkerClickListener(this)
-
         val apolis = LatLng(41.917300, -88.264400)
-//        map.addMarker(MarkerOptions().position(apolis).title("Apolis"))
-//        map.moveCamera(CameraUpdateFactory.newLatLng(apolis))
+
         landlordActivity.viewModel.getLocationsCoordinates().observe(landlordActivity, Observer { latLngList ->
             var latLng = LatLng(0.0, 0.0)
 
@@ -78,10 +86,9 @@ class LandlordMapFragment: Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerCli
                 latLng = e.third
                 var marker = map.addMarker(MarkerOptions().position(latLng).title(e.second))
                 marker.tag = Pair(e.first, e.second)
-                marker.showInfoWindow()
             }
         })
-        map.moveCamera(CameraUpdateFactory.newLatLng(apolis))
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(apolis, 10.0f))
         binding.progressBarLayout.visibility = View.GONE
     }
 
@@ -97,32 +104,6 @@ class LandlordMapFragment: Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerCli
         landlordActivity.goToPropertyDetails()
     }
 
-//    inner class PropertyMapInfoWindowAdapter: GoogleMap.InfoWindowAdapter {
-//
-//        private val window: View = layoutInflater.inflate(R.layout.property_map_info_window, null)
-//        private val contents: View = layoutInflater.inflate(R.layout.property_map_info_content, null)
-//
-//        override fun getInfoContents(marker: Marker): View? {
-//            contents.tv_propertyContent_address.text = marker.title
-//            contents.tv_propertyContent_moreInfo.setOnClickListener {
-//                var item = marker.tag as Pair<LandlordProperty, String>
-//                landlordActivity.viewModel.setSelectedProperty(item.first)
-//                landlordActivity.goToPropertyDetails()
-//            }
-//            return contents
-//        }
-//
-//        override fun getInfoWindow(marker: Marker): View? {
-//            window.tv_propertyInfo_address.text = marker.title
-//            window.tv_propertyInfo_moreInfo.setOnClickListener {
-//                var item = marker.tag as Pair<LandlordProperty, String>
-//                landlordActivity.viewModel.setSelectedProperty(item.first)
-//                landlordActivity.goToPropertyDetails()
-//            }
-//
-//            return null
-//        }
-//
-//    }
+
 
 }

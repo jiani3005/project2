@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.FragmentTenantDetailBinding
 import com.mykotlinapplication.project2.models.Tenant
@@ -34,6 +35,7 @@ class TenantDetailsFragment: Fragment() {
             binding.textViewPhone.text = selectedTenant.phone
             binding.textViewEmail.text = selectedTenant.email
             binding.textViewAddress.text = capitalizeEachWord(selectedTenant.address)
+            Glide.with(landlordActivity).load(selectedTenant.image).into(binding.imageViewProfile)
         })
 
         return binding.root

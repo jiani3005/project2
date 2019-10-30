@@ -15,6 +15,9 @@ import com.mykotlinapplication.project2.utilities.AddPropertyListener
 import com.mykotlinapplication.project2.utilities.AddTenantListener
 import java.lang.Exception
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 
 class LandlordViewModel: ViewModel() {
@@ -90,7 +93,7 @@ class LandlordViewModel: ViewModel() {
                 Log.e(TAG, e.toString())
             }
 
-            if (geocoderMatches != null) {
+            if (geocoderMatches != null && geocoderMatches.size > 0) {
                 latitude = geocoderMatches[0].latitude.toString()
                 longitude = geocoderMatches[0].longitude.toString()
 //                Log.d(TAG, "latitude = $latitude\nlongitude = $longitude")
@@ -204,7 +207,7 @@ class LandlordViewModel: ViewModel() {
                 Log.e(TAG, "geomatcher failed: $e")
             }
 
-            if (geocoderMatches != null) {
+            if (geocoderMatches != null && geocoderMatches.isNotEmpty()) {
                 var latitude = geocoderMatches[0].latitude
                 var longitude = geocoderMatches[0].longitude
                 latLngList.add(Triple(e, formattedAddress, LatLng(latitude, longitude)))

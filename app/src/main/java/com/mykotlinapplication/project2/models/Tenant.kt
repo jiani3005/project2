@@ -10,5 +10,6 @@ data class Tenant (
     @SerializedName("tenantname") val name: String,
     @SerializedName("tenantemail") val email: String,
     @SerializedName("tenantaddress") val address: String,
-    @SerializedName("tenantmobile") val phone: String
+    @SerializedName("tenantmobile") val phone: String,
+    var image: String
 ): Parcelable

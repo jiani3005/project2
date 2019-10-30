@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.FragmentListingDetailBinding
 import com.mykotlinapplication.project2.views.activities.LandlordActivity
@@ -31,6 +32,7 @@ class PropertyDetailsFragment: Fragment() {
 //        val property: LandlordProperty = arguments?.getParcelable("property")!!
 
         landlordActivity.viewModel.getSelectedProperty().observe(landlordActivity, Observer { selectedProperty ->
+            Glide.with(landlordActivity).load(selectedProperty.image).into(binding.imageViewHouse)
             binding.textViewAddress.text = "${capitalizeEachWord(selectedProperty.address)}\n${capitalizeEachWord(selectedProperty.city)}, ${selectedProperty.state.toUpperCase()} ${selectedProperty.country}"
             binding.textViewPrice.text = "$ ${selectedProperty.price}"
             binding.textViewStatus.text = "Status: ${selectedProperty.status.capitalize()}"

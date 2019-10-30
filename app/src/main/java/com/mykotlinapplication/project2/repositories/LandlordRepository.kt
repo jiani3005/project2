@@ -4,15 +4,13 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.JsonElement
-import com.mykotlinapplication.project2.models.ApiClient
-import com.mykotlinapplication.project2.models.LandlordProperty
-import com.mykotlinapplication.project2.models.SharedPreferencesManager
-import com.mykotlinapplication.project2.models.Tenant
+import com.mykotlinapplication.project2.models.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Exception
+import kotlin.random.Random
 
 object LandlordRepository {
 
@@ -20,6 +18,8 @@ object LandlordRepository {
     private val sharedPreferences = SharedPreferencesManager
     private val apiInterface = ApiClient.getApiInterface()
     private val isUpdating = MutableLiveData<Boolean>()
+    private val propertyImages = ImageDatabase.pictureList
+    private val tenantImages = ImageDatabase.avatarList
     private val testingId = "3"
 
     fun getProperty(): MutableLiveData<ArrayList<LandlordProperty>> {
@@ -47,7 +47,10 @@ object LandlordRepository {
                                 var property = propertyJsonArray[i].asJsonObject
 
                                 var gson = Gson()
-                                propertyArray.add(gson.fromJson(property, LandlordProperty::class.java))
+                                var newProperty = gson.fromJson(property, LandlordProperty::class.java)
+                                newProperty.image = propertyImages[Random.nextInt(propertyImages.size)]
+                                propertyArray.add(newProperty)
+//                                Log.d(TAG, newProperty.toString())
 
 //                                var id = property["id"].asString
 //                                var address = property["propertyaddress"].asString.capitalize()
@@ -184,7 +187,9 @@ object LandlordRepository {
                                 var tenant = jsonArrayTenant[i].asJsonObject
 
                                 var gson = Gson()
-                                tenantArrayList.add(gson.fromJson(tenant, Tenant::class.java))
+                                var newTenant = gson.fromJson(tenant, Tenant::class.java)
+                                newTenant.image = tenantImages[Random.nextInt(propertyImages.size)]
+                                tenantArrayList.add(newTenant)
 
 //                                var id = tenant["id"].asString
 //                                var name = tenant["tenantname"].asString

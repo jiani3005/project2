@@ -26,7 +26,7 @@ class TenantActivity : AppCompatActivity(), TenantHelper {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_tenant)
 
         viewModel = ViewModelProviders.of(this).get(TenantViewModel::class.java)
-        goToListings()
+        supportFragmentManager.beginTransaction().replace(R.id.tenant_container, ListingsFragment()).commit()
 
 
         binding.buttonBack.setOnClickListener {

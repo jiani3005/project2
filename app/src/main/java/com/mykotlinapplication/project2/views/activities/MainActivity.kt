@@ -10,6 +10,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity(), MainHelper {
                     goToLandlordActivity()
                 }
             } else {
-                goToLogin()
+                supportFragmentManager.beginTransaction().replace(R.id.main_fragment_container, LoginFragment()).commit()
             }
         })
 
@@ -99,7 +100,17 @@ class MainActivity : AppCompatActivity(), MainHelper {
         if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
         } else {
-            super.onBackPressed()
+            val builder = AlertDialog.Builder(this).apply {
+                setTitle("Exit Application")
+                setMessage("Do you want to exit current application?")
+                setPositiveButton("Yes") {dialog, which ->
+                    finishAffinity()
+                }
+                setNegativeButton("No") {dialog, which ->
+
+                }
+            }
+            builder.create().show()
         }
 
     }
