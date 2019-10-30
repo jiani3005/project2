@@ -40,7 +40,7 @@ class RegisterFragment: Fragment(), RegisterListener {
         binding.buttonRegister.setOnClickListener {
             var isTenant = false
             if (binding.radioGroup.checkedRadioButtonId == -1) {
-                onFailure("Please select one of the options")
+                Toast.makeText(mainActivity, "Please select one of the options", Toast.LENGTH_SHORT).show()
                 binding.radioGroup.requestFocus()
             } else {
                 if (binding.radioButtonTenant.isChecked) {
@@ -50,8 +50,11 @@ class RegisterFragment: Fragment(), RegisterListener {
                 mainActivity.viewModel.userRegister(binding.editTextEmail.text.toString(), binding.editTextPassword.text.toString(), binding.editTextConfirmPassword.text.toString(), isTenant)
                     .observe(mainActivity, Observer { isRegisterSuccess ->
                         if (isRegisterSuccess) {
+                            onSuccess()
                             mainActivity.supportFragmentManager.popBackStack()
                             mainActivity.goToLogin()
+                        } else {
+                            onFailure()
                         }
                 })
             }
@@ -77,12 +80,12 @@ class RegisterFragment: Fragment(), RegisterListener {
         binding.editTextConfirmPassword.requestFocus()
     }
 
-    override fun onFailure(message: String) {
-        Toast.makeText(mainActivity, message, Toast.LENGTH_SHORT).show()
+    private fun onFailure() {
+        Toast.makeText(mainActivity, "Register failed.\nEmail already exists.", Toast.LENGTH_SHORT).show()
     }
 
-    override fun onSuccess(message: String) {
-        Toast.makeText(mainActivity, message, Toast.LENGTH_SHORT).show()
+    private fun onSuccess() {
+        Toast.makeText(mainActivity, "Successfully registered", Toast.LENGTH_SHORT).show()
     }
 
 

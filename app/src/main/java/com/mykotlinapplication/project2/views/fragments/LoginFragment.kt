@@ -50,13 +50,20 @@ class LoginFragment: Fragment(), LoginListener {
         binding.buttonLogin.setOnClickListener {
 //            var isTenant = mainActivity.viewModel.userLogin(binding.editTextEmail.text.toString(), binding.editTextPassword.text.toString(), binding.checkBoxRememberMe.isChecked)
             mainActivity.viewModel.userLogin(binding.editTextEmail.text.toString(), binding.editTextPassword.text.toString(), binding.checkBoxRememberMe.isChecked).observe(mainActivity,
-                Observer { isTenant ->
-                    if (isTenant != null) {
-                        if (isTenant) {
+                Observer { response ->
+                    val r = response
+                    var isSuccess = response["isSuccess"]
+                    var msg = response["msg"]
+
+                    if (isSuccess == "true") {
+                        onSuccess()
+                        if (msg == "tenant") {
                             mainActivity.goToTenantActivity()
                         } else {
                             mainActivity.goToLandlordActivity()
                         }
+                    } else {
+                        onFailure(msg!!)
                     }
 
             })
@@ -85,12 +92,12 @@ class LoginFragment: Fragment(), LoginListener {
         binding.editTextPassword.requestFocus()
     }
 
-    override fun onFailure(message: String) {
+    private fun onFailure(message: String) {
         Toast.makeText(mainActivity, message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onSuccess(message: String) {
-        Toast.makeText(mainActivity, message, Toast.LENGTH_SHORT).show()
+    private fun onSuccess() {
+        Toast.makeText(mainActivity, "Login Success!", Toast.LENGTH_SHORT).show()
     }
 
 }

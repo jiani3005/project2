@@ -27,8 +27,8 @@ class TenantProfileFragment: Fragment() {
         tenantActivity.editAppBar("Profile", true)
 
         tenantActivity.viewModel.getUserEmailAndType().observe(tenantActivity, Observer { info ->
-            binding.textViewEmail.text = capitalizeEachWord(info.first)
-            binding.textViewEmail.text = info.second.capitalize()
+            binding.textViewEmail.text = info.first
+            binding.textViewUserType.text = info.second.capitalize()
         })
 
 
@@ -40,14 +40,4 @@ class TenantProfileFragment: Fragment() {
         return binding.root
     }
 
-    private fun capitalizeEachWord(string: String): String {
-        var inputList = string.split(" ")
-        var outputString = ""
-
-        for (e in inputList) {
-            outputString += e.capitalize() + " "
-        }
-
-        return outputString.trim()
-    }
 }

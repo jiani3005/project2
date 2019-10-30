@@ -39,10 +39,13 @@ class ForgotPasswordFragment: Fragment(), ForgotPasswordListener {
 
         binding.buttonSubmit.setOnClickListener {
             mainActivity.viewModel.userForgotPassword(binding.editTextEmail.text.toString()).observe(mainActivity,
-                Observer { isSuccess ->
-                    if (isSuccess) {
+                Observer { message ->
+                    if (message != "false") {
+                        onSuccess(message)
                         mainActivity.supportFragmentManager.popBackStack()
                         mainActivity.goToLogin()
+                    } else {
+                        onFailure()
                     }
             })
         }
@@ -55,11 +58,11 @@ class ForgotPasswordFragment: Fragment(), ForgotPasswordListener {
         binding.editTextEmail.requestFocus()
     }
 
-    override fun onFailure(message: String) {
-        Toast.makeText(mainActivity, message, Toast.LENGTH_SHORT).show()
+    private fun onFailure() {
+        Toast.makeText(mainActivity, "Email is not registered.", Toast.LENGTH_SHORT).show()
     }
 
-    override fun onSuccess(message: String) {
+    private fun onSuccess(message: String) {
         Toast.makeText(mainActivity, message, Toast.LENGTH_SHORT).show()
     }
 

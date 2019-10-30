@@ -175,7 +175,7 @@ class LandlordViewModel: ViewModel() {
         return isSuccess
     }
 
-    fun getUserEmail(): LiveData<Pair<String, String>> {
+    fun getUserEmailAndType(): LiveData<Pair<String, String>> {
         return repo.getUserEmailAndType()
     }
 

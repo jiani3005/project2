@@ -26,7 +26,7 @@ class LandlordProfileFragment: Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
         landlordActivity.editAppBar("Profile", true)
 
-        landlordActivity.viewModel.getUserEmail().observe(landlordActivity, Observer { userInfo ->
+        landlordActivity.viewModel.getUserEmailAndType().observe(landlordActivity, Observer { userInfo ->
             binding.textViewEmail.text = userInfo.first
             binding.textViewUserType.text = userInfo.second.capitalize()
         })

@@ -26,7 +26,7 @@ object LandlordRepository {
         var propertyList = MutableLiveData<ArrayList<LandlordProperty>>()
         isUpdating.value = true
 
-        apiInterface.getLandlordProperty(testingId, sharedPreferences.getUserType()).enqueue(object: retrofit2.Callback<JsonElement> {
+        apiInterface.getLandlordProperty(testingId, sharedPreferences.getUserType()).enqueue(object: Callback<JsonElement> {
             override fun onFailure(call: Call<JsonElement>, t: Throwable) {
                 isUpdating.value = false
                 Log.d(TAG, "getProperty onFailure: $t")
@@ -88,7 +88,7 @@ object LandlordRepository {
 
         isUpdating.value = true
 
-        apiInterface.addProperty(address, city, state, country, property_status, price, mortgageInfo, userId, userType, latitude, longitude).enqueue(object: retrofit2.Callback<JsonElement> {
+        apiInterface.addProperty(address, city, state, country, property_status, price, mortgageInfo, userId, userType, latitude, longitude).enqueue(object: Callback<JsonElement> {
             override fun onFailure(call: Call<JsonElement>, t: Throwable) {
                 Log.e(TAG, "addProperty() onFailure: $t")
             }
