@@ -1,8 +1,7 @@
-package com.mykotlinapplication.project2.models
+package com.mykotlinapplication.project2.models.databases
 
 import android.content.Context
 import com.mykotlinapplication.project2.MyApplication
-import com.mykotlinapplication.project2.views.activities.MainActivity
 
 object SharedPreferencesManager {
 

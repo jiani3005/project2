@@ -27,6 +27,7 @@ class PropertyDetailsFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_listing_detail, container, false)
         binding.textViewAddTenant.visibility = View.VISIBLE
+//        binding.buttonShare.performClick()
         landlordActivity.editAppBar("Property Details", true)
 
 //        val property: LandlordProperty = arguments?.getParcelable("property")!!
@@ -44,9 +45,9 @@ class PropertyDetailsFragment: Fragment() {
             }
         })
 
-
-//        Log.d(TAG, property.toString())
-
+        binding.buttonShare.setOnClickListener {
+            landlordActivity.shareProperty()
+        }
 
 
         return binding.root

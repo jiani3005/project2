@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +35,7 @@ import com.mykotlinapplication.project2.views.activities.LandlordActivity
 import com.mykotlinapplication.project2.views.adapters.MapInfoWindowAdapter
 import kotlinx.android.synthetic.main.property_map_info_content.view.*
 import kotlinx.android.synthetic.main.property_map_info_window.view.*
+import java.lang.Exception
 
 class LandlordMapFragment: Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
     GoogleMap.OnInfoWindowClickListener {
@@ -79,13 +81,16 @@ class LandlordMapFragment: Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerCli
 
         val apolis = LatLng(41.917300, -88.264400)
 
-        landlordActivity.viewModel.getLocationsCoordinates().observe(landlordActivity, Observer { latLngList ->
-            var latLng = LatLng(0.0, 0.0)
-
-            for (e in latLngList) {
-                latLng = e.third
-                var marker = map.addMarker(MarkerOptions().position(latLng).title(e.second))
-                marker.tag = Pair(e.first, e.second)
+        landlordActivity.viewModel.getProperty().observe(landlordActivity, Observer { propertyList ->
+            for (e in propertyList) {
+                try {
+                    var latLng = LatLng(e.latitude.toDouble(), e.longitude.toDouble())
+                    var fullAddress = capitalizeEachWord(e.address) + "\n" + capitalizeEachWord(e.city) + ", " + e.state.toUpperCase() + " " + e.country
+                    var marker = map.addMarker(MarkerOptions().position(latLng).title(fullAddress))
+                    marker.tag = e
+                } catch (e: Exception) {
+                    Log.e(TAG, "Fail to add tag: $e")
+                }
             }
         })
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(apolis, 10.0f))
@@ -99,11 +104,20 @@ class LandlordMapFragment: Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerCli
 
     override fun onInfoWindowClick(marker: Marker) {
 
-        var item = marker.tag as Pair<LandlordProperty, String>
-        landlordActivity.viewModel.setSelectedProperty(item.first)
+        var item = marker.tag as LandlordProperty
+        landlordActivity.viewModel.setSelectedProperty(item)
         landlordActivity.goToPropertyDetails()
     }
 
+    private fun capitalizeEachWord(string: String): String {
+        var inputList = string.split(" ")
+        var outputString = ""
 
+        for (e in inputList) {
+            outputString += e.capitalize() + " "
+        }
+
+        return outputString.trim()
+    }
 
 }

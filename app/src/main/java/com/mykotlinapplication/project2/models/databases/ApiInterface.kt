@@ -1,16 +1,11 @@
-package com.mykotlinapplication.project2.models
+package com.mykotlinapplication.project2.models.databases
 
 import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import io.reactivex.Observable
+import com.mykotlinapplication.project2.models.ListingsPropertyList
 import io.reactivex.Single
 import okhttp3.ResponseBody
-import org.json.JSONObject
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiInterface {

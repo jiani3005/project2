@@ -8,5 +8,6 @@ interface TenantHelper {
     fun goToProfile()
     fun goToMainActivity()
     fun editAppBar(title: String, showBackButton: Boolean)
+    fun shareProperty()
 
 }

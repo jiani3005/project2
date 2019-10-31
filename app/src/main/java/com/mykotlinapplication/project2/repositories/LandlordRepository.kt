@@ -5,6 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.mykotlinapplication.project2.models.*
+import com.mykotlinapplication.project2.models.databases.ApiClient
+import com.mykotlinapplication.project2.models.databases.ImageDatabase
+import com.mykotlinapplication.project2.models.databases.SharedPreferencesManager
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,10 +20,11 @@ object LandlordRepository {
     private val TAG = "LandlordRepository"
     private val sharedPreferences = SharedPreferencesManager
     private val apiInterface = ApiClient.getApiInterface()
+    private val imageDatabase = ImageDatabase.getImageDatabaseInstance().imageDao()
     private val isUpdating = MutableLiveData<Boolean>()
-    private val propertyImages = ImageDatabase.pictureList
-    private val tenantImages = ImageDatabase.avatarList
-    private val testingId = "3"
+    private val propertyImages = imageDatabase.getImageFromCategory("property")
+    private val tenantImages = imageDatabase.getImageFromCategory("tenant")
+    private val testingId = sharedPreferences.getUserId()
 
     fun getProperty(): MutableLiveData<ArrayList<LandlordProperty>> {
         var propertyList = MutableLiveData<ArrayList<LandlordProperty>>()
@@ -48,7 +52,7 @@ object LandlordRepository {
 
                                 var gson = Gson()
                                 var newProperty = gson.fromJson(property, LandlordProperty::class.java)
-                                newProperty.image = propertyImages[Random.nextInt(propertyImages.size)]
+                                newProperty.image = propertyImages[i % propertyImages.size].imageLink
                                 propertyArray.add(newProperty)
 //                                Log.d(TAG, newProperty.toString())
 
@@ -83,13 +87,26 @@ object LandlordRepository {
         return propertyList
     }
 
-    fun addProperty(address: String, city: String, state: String, country: String, property_status: String, price: String, mortgageInfo: String, latitude: String, longitude: String): MutableLiveData<Boolean> {
+    fun addProperty(address: String, city: String, state: String, country: String, property_status: String, price: String, mortgageInfo: String): MutableLiveData<Boolean> {
         var isSuccess = MutableLiveData<Boolean>()
 
         val userId = testingId
         val userType = sharedPreferences.getUserType()
 
         isUpdating.value = true
+
+        var fullAddress = "$address, $city, $state $country"
+
+
+        var latitude = ""
+        var longitude = ""
+        var location = GeocoderAsync.execute(fullAddress).get()
+        Log.d(TAG, "location = $location")
+
+        if (location != null) {
+            latitude = location.latitude.toString()
+            longitude = location.longitude.toString()
+        }
 
         apiInterface.addProperty(address, city, state, country, property_status, price, mortgageInfo, userId, userType, latitude, longitude).enqueue(object: Callback<JsonElement> {
             override fun onFailure(call: Call<JsonElement>, t: Throwable) {
@@ -188,7 +205,7 @@ object LandlordRepository {
 
                                 var gson = Gson()
                                 var newTenant = gson.fromJson(tenant, Tenant::class.java)
-                                newTenant.image = tenantImages[Random.nextInt(propertyImages.size)]
+                                newTenant.image = tenantImages[i % tenantImages.size].imageLink
                                 tenantArrayList.add(newTenant)
 
 //                                var id = tenant["id"].asString

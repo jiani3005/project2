@@ -5,21 +5,13 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.gson.JsonElement
 import com.mykotlinapplication.project2.utilities.LoginListener
 import com.mykotlinapplication.project2.utilities.RegisterListener
-import com.mykotlinapplication.project2.models.ApiClient
-import com.mykotlinapplication.project2.models.SharedPreferencesManager
 import com.mykotlinapplication.project2.repositories.MainRepository
 import com.mykotlinapplication.project2.utilities.ForgotPasswordListener
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import okhttp3.ResponseBody
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Response
-import java.lang.StringBuilder
 
 class MainViewModel: ViewModel() {
 

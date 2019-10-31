@@ -35,6 +35,10 @@ class ListingsDetailsFragment: Fragment() {
 
         })
 
+        binding.buttonShare.setOnClickListener {
+            tenantActivity.shareProperty()
+        }
+
 
         return binding.root
     }

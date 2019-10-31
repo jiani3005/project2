@@ -3,13 +3,12 @@ package com.mykotlinapplication.project2.repositories
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.mykotlinapplication.project2.models.*
-import io.reactivex.Single
+import com.mykotlinapplication.project2.models.databases.ApiClient
+import com.mykotlinapplication.project2.models.databases.ImageDatabase
+import com.mykotlinapplication.project2.models.databases.SharedPreferencesManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import kotlin.random.Random
 
 object TenantRepository {
@@ -17,9 +16,10 @@ object TenantRepository {
     private val TAG = "TenantRepository"
     private val sharedPreferences = SharedPreferencesManager
     private val apiInterface = ApiClient.getApiInterface()
+    private val imageDatabase = ImageDatabase.getImageDatabaseInstance().imageDao()
     private val isUpdating = MutableLiveData<Boolean>()
     private val compositeDisposable = CompositeDisposable()
-    private val propertyImages = ImageDatabase.pictureList
+    private val propertyImages = imageDatabase.getImageFromCategory("property")
 
 
     fun getListings(): MutableLiveData<ArrayList<ListingsProperty>> {
@@ -37,7 +37,7 @@ object TenantRepository {
                         if (e.price != "" && e.address != "" && e.city != "" && e.state != "" && e.postcode != "") {
                             if (e.price.matches("-?\\d+(\\.\\d+)?".toRegex())) {
                                 if (e.address.toLowerCase() != "abc" && e.city.toLowerCase() != "abc" && e.state.toLowerCase() != "abc" && e.postcode.toLowerCase() != "abc") {
-                                    e.image = propertyImages[Random.nextInt(propertyImages.size)]
+                                    e.image = propertyImages[Random.nextInt(propertyImages.size)].imageLink
                                     newList.add(e)
                                 }
                             }

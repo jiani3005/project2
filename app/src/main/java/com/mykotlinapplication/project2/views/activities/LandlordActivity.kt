@@ -1,6 +1,7 @@
 package com.mykotlinapplication.project2.views.activities
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -12,6 +13,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.ActivityLandlordBinding
 import com.mykotlinapplication.project2.helpers.LandlordHelper
+import com.mykotlinapplication.project2.models.LandlordProperty
+import com.mykotlinapplication.project2.models.Tenant
 import com.mykotlinapplication.project2.viewmodels.LandlordViewModel
 import com.mykotlinapplication.project2.views.fragments.*
 
@@ -20,11 +23,21 @@ class LandlordActivity : AppCompatActivity(), LandlordHelper {
     private lateinit var binding: ActivityLandlordBinding
     lateinit var viewModel: LandlordViewModel
     private var TAG = "LandlordActivity"
+    private var selectedProperty = LandlordProperty()
+    private var selectedTenant = Tenant("", "", "", "", "", "")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_landlord)
         viewModel = ViewModelProviders.of(this).get(LandlordViewModel::class.java)
+
+        viewModel.getSelectedProperty().observe(this, Observer {
+            selectedProperty = it
+        })
+
+        viewModel.getSelectedTenant().observe(this, Observer {
+            selectedTenant = it
+        })
 
         supportFragmentManager.beginTransaction().replace(R.id.landlord_container, PropertyFragment()).commit()
 
@@ -108,8 +121,49 @@ class LandlordActivity : AppCompatActivity(), LandlordHelper {
         supportFragmentManager.beginTransaction().replace(R.id.landlord_container, LandlordProfileFragment()).addToBackStack(null).commit()
     }
 
+    private fun goToCall() {
+        startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:${selectedTenant.phone}")))
+
+    }
+
+    private fun goToMessage() {
+        startActivity(Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:${selectedTenant.phone}")))
+    }
+
+    private fun goToEmail() {
+        startActivity(Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:${selectedTenant.email}")))
+    }
+
     override fun goToMainActivity() {
         startActivity(Intent(this, MainActivity::class.java))
+    }
+
+    override fun shareProperty() {
+        val fullAddress = "${capitalizeEachWord(selectedProperty.address)}\n${capitalizeEachWord(selectedProperty.city)}, ${selectedProperty.state.toUpperCase()} ${selectedProperty.country}"
+
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, "Share Property")
+            putExtra(Intent.EXTRA_TEXT, "Check out this property!\nAddress: $fullAddress")
+        }
+        startActivity(Intent.createChooser(intent, "Share using:"))
+
+    }
+
+    override fun performCommunicationAction(title: String, message: String, action: String) {
+        val builder = AlertDialog.Builder(this).apply {
+            setTitle(title)
+            setMessage(message)
+            setPositiveButton("Yes") {dialog, which ->
+                when (action) {
+                    "call" -> goToCall()
+                    "message" -> goToMessage()
+                    "email" -> goToEmail()
+                }
+            }
+            setNegativeButton("No") {dialog, which ->  }
+        }
+        builder.create().show()
     }
 
     override fun onBackPressed() {
@@ -124,6 +178,17 @@ class LandlordActivity : AppCompatActivity(), LandlordHelper {
             }
         }
         builder.create().show()
+    }
+
+    private fun capitalizeEachWord(string: String): String {
+        var inputList = string.split(" ")
+        var outputString = ""
+
+        for (e in inputList) {
+            outputString += e.capitalize() + " "
+        }
+
+        return outputString.trim()
     }
 
 }

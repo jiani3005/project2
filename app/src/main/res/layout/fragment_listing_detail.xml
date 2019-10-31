@@ -28,7 +28,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/fredoka_one"
-            android:text="$ 200,000"
+            android:text="@string/sample_price"
             android:textColor="@color/black"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/days_one"
-            android:text="3809 Illinois Ave,\nSt.Charles, IL 60174\nUSA"
+            android:text="@string/sample_address"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="Status: Active"
+            android:text="@string/status_active"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_price" />
@@ -61,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="Description"
+            android:text="@string/description"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_status" />
@@ -70,16 +70,26 @@
             android:id="@+id/textView_addTenant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="64dp"
             android:layout_marginEnd="20dp"
             android:clickable="true"
             android:fontFamily="@font/alfa_slab_one"
-            android:text="Add Tenant"
+            android:text="@string/add_tenant"
             android:textColor="@color/basil_orange"
             android:textSize="18sp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView_house" />
+
+        <ImageView
+            android:id="@+id/button_share"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView_house"
+            app:srcCompat="@drawable/share" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

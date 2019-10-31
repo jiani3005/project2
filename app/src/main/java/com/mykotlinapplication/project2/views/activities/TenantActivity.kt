@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.ActivityTenantBinding
 import com.mykotlinapplication.project2.helpers.TenantHelper
+import com.mykotlinapplication.project2.models.ListingsProperty
 import com.mykotlinapplication.project2.viewmodels.TenantViewModel
 import com.mykotlinapplication.project2.views.fragments.ListingsDetailsFragment
 import com.mykotlinapplication.project2.views.fragments.ListingsFragment
@@ -20,6 +22,7 @@ class TenantActivity : AppCompatActivity(), TenantHelper {
 
     lateinit var viewModel: TenantViewModel
     private lateinit var binding: ActivityTenantBinding
+    private var selectedProperty = ListingsProperty("", "", "", "", "", "", "", "", "", "", "", "")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +30,10 @@ class TenantActivity : AppCompatActivity(), TenantHelper {
 
         viewModel = ViewModelProviders.of(this).get(TenantViewModel::class.java)
         supportFragmentManager.beginTransaction().replace(R.id.tenant_container, ListingsFragment()).commit()
+
+        viewModel.getSelectedListings().observe(this, Observer {
+            selectedProperty = it
+        })
 
 
         binding.buttonBack.setOnClickListener {
@@ -73,6 +80,18 @@ class TenantActivity : AppCompatActivity(), TenantHelper {
         startActivity(Intent(this, MainActivity::class.java))
     }
 
+    override fun shareProperty() {
+        val fullAddress = "${capitalizeEachWord(selectedProperty.address)}\n${capitalizeEachWord(selectedProperty.city)}, ${selectedProperty.state.toUpperCase()} ${selectedProperty.postcode}"
+
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, "Share Property")
+            putExtra(Intent.EXTRA_TEXT, "Check out this property!\nAddress: $fullAddress")
+        }
+        startActivity(Intent.createChooser(intent, "Share using:"))
+
+    }
+
     override fun onBackPressed() {
 //        if (supportFragmentManager.backStackEntryCount == 0) {
             val builder = AlertDialog.Builder(this).apply {
@@ -91,5 +110,16 @@ class TenantActivity : AppCompatActivity(), TenantHelper {
 //        else {
 //            super.onBackPressed()
 //        }
+    }
+
+    private fun capitalizeEachWord(string: String): String {
+        var inputList = string.split(" ")
+        var outputString = ""
+
+        for (e in inputList) {
+            outputString += e.capitalize() + " "
+        }
+
+        return outputString.trim()
     }
 }

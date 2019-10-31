@@ -13,5 +13,7 @@ interface LandlordHelper {
     fun goToMap()
     fun goToProfile()
     fun goToMainActivity()
+    fun shareProperty()
+    fun performCommunicationAction(title: String, message: String, action: String)
 
 }

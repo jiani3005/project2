@@ -1,5 +1,6 @@
 package com.mykotlinapplication.project2.views.fragments
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -37,11 +38,17 @@ class RegisterFragment: Fragment(), RegisterListener {
 
         })
 
+        binding.textViewTerms.setOnClickListener {
+            mainActivity.goToTermsAndConditions()
+        }
+
         binding.buttonRegister.setOnClickListener {
             var isTenant = false
             if (binding.radioGroup.checkedRadioButtonId == -1) {
                 Toast.makeText(mainActivity, "Please select one of the options", Toast.LENGTH_SHORT).show()
                 binding.radioGroup.requestFocus()
+            } else if (!binding.checkBoxAcceptedTerms.isChecked) {
+                showAlertDialog()
             } else {
                 if (binding.radioButtonTenant.isChecked) {
                     isTenant = true
@@ -63,6 +70,15 @@ class RegisterFragment: Fragment(), RegisterListener {
         }
 
         return binding.root
+    }
+
+    private fun showAlertDialog() {
+        val builder = AlertDialog.Builder(mainActivity).apply {
+            setTitle("ACCEPT TERMS")
+            setMessage("Please accept the terms of service in order to proceed.")
+            setNegativeButton("Dismiss"){dialog, which ->  }
+        }
+        builder.create().show()
     }
 
     override fun setEmailError(message: String) {
@@ -87,6 +103,5 @@ class RegisterFragment: Fragment(), RegisterListener {
     private fun onSuccess() {
         Toast.makeText(mainActivity, "Successfully registered", Toast.LENGTH_SHORT).show()
     }
-
 
 }

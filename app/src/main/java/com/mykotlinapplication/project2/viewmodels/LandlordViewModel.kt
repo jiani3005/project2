@@ -15,6 +15,7 @@ import com.mykotlinapplication.project2.utilities.AddPropertyListener
 import com.mykotlinapplication.project2.utilities.AddTenantListener
 import java.lang.Exception
 import com.google.android.gms.maps.model.LatLng
+import com.mykotlinapplication.project2.models.GeocoderAsync
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -81,25 +82,7 @@ class LandlordViewModel: ViewModel() {
             addPropertyListener?.setMortgageInfoError()
         } else {
             isUpdating = repo.getIsUpdating()
-
-            var latitude = ""
-            var longitude = ""
-            var geocoderMatches: List<Address>? = null
-
-            try {
-                var fullAddress = "$address, $city, $state $country"
-                geocoderMatches = Geocoder(MyApplication.context).getFromLocationName(fullAddress, 1)
-            } catch (e: Exception) {
-                Log.e(TAG, e.toString())
-            }
-
-            if (geocoderMatches != null && geocoderMatches.size > 0) {
-                latitude = geocoderMatches[0].latitude.toString()
-                longitude = geocoderMatches[0].longitude.toString()
-//                Log.d(TAG, "latitude = $latitude\nlongitude = $longitude")
-            }
-            isUpdating = repo.getIsUpdating()
-            isSuccess = repo.addProperty(address, city, state, country, property_status, price, mortgageInfo, latitude, longitude)
+            isSuccess = repo.addProperty(address, city, state, country, property_status, price, mortgageInfo)
 
         }
 
@@ -186,39 +169,6 @@ class LandlordViewModel: ViewModel() {
         return isUpdating
     }
 
-    fun getLocationsCoordinates(): LiveData<ArrayList<Triple<LandlordProperty, String, LatLng>>> {
-        var result = MutableLiveData<ArrayList<Triple<LandlordProperty, String, LatLng>>>()
-        var latLngList = arrayListOf<Triple<LandlordProperty, String, LatLng>>()
-
-        isUpdating.value = true
-
-        for (e in property_list.value!!) {
-//            var latitude = ""
-//            var longitude = ""
-            var fullAddress = ""
-            var formattedAddress = ""
-            var geocoderMatches: List<Address>? = null
-
-            try {
-                formattedAddress = "${e.address}\n${e.city}, ${e.state} ${e.country}"
-                fullAddress = "${e.address}, ${e.city}, ${e.state} ${e.country}"
-                geocoderMatches = Geocoder(MyApplication.context).getFromLocationName(fullAddress, 1)
-            } catch (e: Exception) {
-                Log.e(TAG, "geomatcher failed: $e")
-            }
-
-            if (geocoderMatches != null && geocoderMatches.isNotEmpty()) {
-                var latitude = geocoderMatches[0].latitude
-                var longitude = geocoderMatches[0].longitude
-                latLngList.add(Triple(e, formattedAddress, LatLng(latitude, longitude)))
-            }
-        }
-        result.value = latLngList
-        isUpdating.value = false
-
-        return result
-    }
-
     private fun capitalizeEachWord(string: String): String {
         var inputList = string.split(" ")
         var outputString = ""
@@ -229,4 +179,5 @@ class LandlordViewModel: ViewModel() {
 
         return outputString.trim()
     }
+
 }

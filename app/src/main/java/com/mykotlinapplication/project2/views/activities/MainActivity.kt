@@ -6,22 +6,23 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.ActivityMainBinding
 import com.mykotlinapplication.project2.helpers.MainHelper
+import com.mykotlinapplication.project2.models.databases.Image
+import com.mykotlinapplication.project2.models.databases.ImageDatabase
 import com.mykotlinapplication.project2.viewmodels.MainViewModel
 import com.mykotlinapplication.project2.views.fragments.ForgotPasswordFragment
 import com.mykotlinapplication.project2.views.fragments.LoginFragment
 import com.mykotlinapplication.project2.views.fragments.RegisterFragment
+import com.mykotlinapplication.project2.views.fragments.TermsAndConditionsFragment
 
 class MainActivity : AppCompatActivity(), MainHelper {
 
@@ -60,6 +61,10 @@ class MainActivity : AppCompatActivity(), MainHelper {
 
     override fun goToForgotPassword() {
         supportFragmentManager.beginTransaction().replace(R.id.main_fragment_container, ForgotPasswordFragment()).addToBackStack(null).commit()
+    }
+
+    override fun goToTermsAndConditions() {
+        supportFragmentManager.beginTransaction().replace(R.id.main_fragment_container, TermsAndConditionsFragment()).addToBackStack(null).commit()
     }
 
     override fun goToTenantActivity() {

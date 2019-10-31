@@ -12,7 +12,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="3809 Illinois Ave,\nSt. Charles, IL 60174"
+            android:text="@string/sample_address"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/days_one"
-            android:text="Name"
+            android:text="@string/name"
             android:textSize="28sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -53,10 +53,12 @@
             android:layout_marginStart="66dp"
             android:layout_marginTop="20dp"
             android:orientation="vertical"
+            android:clickable="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_name">
 
             <ImageView
+                android:id="@+id/call_icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:clickable="true"
@@ -66,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="call"
+                android:text="@string/call"
                 android:textColor="@color/call_icon_background"
                 tools:layout_editor_absoluteX="78dp"
                 tools:layout_editor_absoluteY="302dp" />
@@ -85,6 +87,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView_name">
 
             <ImageView
+                android:id="@+id/message_icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
@@ -95,7 +98,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="message"
+                android:text="@string/message"
                 android:textColor="@color/call_icon_background" />
 
         </LinearLayout>
@@ -107,10 +110,12 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="65dp"
             android:orientation="vertical"
+            android:clickable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_name">
 
             <ImageView
+                android:id="@+id/email_icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:clickable="true"
@@ -121,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
-                android:text="email"
+                android:text="@string/email_lower_case"
                 android:textColor="@color/call_icon_background" />
         </LinearLayout>
 
@@ -131,7 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:text="Mobile"
+            android:text="@string/mobile"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView_call" />
@@ -142,7 +147,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:text="Email"
+            android:text="@string/email"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_phone" />
@@ -153,7 +158,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:text="Property Address"
+            android:text="@string/property_address"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_email" />
@@ -163,7 +168,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="+1 234 679 3571"
+            android:text="@string/sample_phone"
             android:textColor="#2E6FED"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -174,7 +179,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="abc@gmail.com"
+            android:text="@string/sample_email"
             android:textColor="#2E6FED"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"

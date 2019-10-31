@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/fredoka_one"
-                    android:text="Tenant"
+                    android:text="@string/tenant"
                     android:textColor="@color/basil_jet"
                     android:textSize="36sp" />
 

@@ -7,6 +7,7 @@ interface MainHelper {
     fun goToForgotPassword()
     fun goToTenantActivity()
     fun goToLandlordActivity()
+    fun goToTermsAndConditions()
     fun setUpNotification()
 
 }

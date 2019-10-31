@@ -3,11 +3,9 @@ package com.mykotlinapplication.project2.repositories
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.JsonElement
-import com.mykotlinapplication.project2.models.ApiClient
-import com.mykotlinapplication.project2.models.SharedPreferencesManager
-import io.reactivex.Observable
+import com.mykotlinapplication.project2.models.databases.ApiClient
+import com.mykotlinapplication.project2.models.databases.SharedPreferencesManager
 import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -15,7 +13,8 @@ import retrofit2.Response
 object MainRepository {
 
     private const val TAG = "MainRepository"
-    private val sharedPreferences = SharedPreferencesManager
+    private val sharedPreferences =
+        SharedPreferencesManager
     private val apiInterface = ApiClient.getApiInterface()
     private val isUpdating = MutableLiveData<Boolean>()
 
