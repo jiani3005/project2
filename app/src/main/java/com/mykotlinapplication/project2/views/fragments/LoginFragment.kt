@@ -2,6 +2,7 @@ package com.mykotlinapplication.project2.views.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ class LoginFragment: Fragment(), LoginListener {
 
     private lateinit var binding: FragmentLoginBinding
     private lateinit var mainActivity: MainActivity
+    private val TAG = "LoginFragment"
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -68,7 +70,6 @@ class LoginFragment: Fragment(), LoginListener {
 
             })
 
-
         }
 
         binding.textViewForgotPassword.setOnClickListener {
@@ -77,6 +78,35 @@ class LoginFragment: Fragment(), LoginListener {
 
         binding.textViewSignup.setOnClickListener {
             mainActivity.goToRegister()
+        }
+
+        binding.googleLayout.setOnClickListener {
+            mainActivity.loginWithFirebase()
+
+            mainActivity.viewModel.getIsGoogleSignInSuccess().observe(mainActivity, Observer { response ->
+                var isSuccess = response["isSuccess"]
+                var msg = response["msg"]
+
+                if (isSuccess == "true") {
+                    onSuccess()
+                    if (msg == "tenant") {
+                        mainActivity.goToTenantActivity()
+                    } else {
+                        mainActivity.goToLandlordActivity()
+                    }
+                } else {
+                    if (msg == "New User") {
+                        //show dialog box to choose tenant or landlord
+                        mainActivity.showAlertDialog()
+                    } else {
+                        onFailure(msg!!)
+                    }
+                }
+            })
+        }
+
+        binding.facebookLayout.setOnClickListener {
+            Log.d(TAG, "facebook clicked!")
         }
 
         return binding.root

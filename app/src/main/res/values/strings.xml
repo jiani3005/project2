@@ -46,7 +46,7 @@
     <string name="property_address">Property Address</string>
     <string name="sample_phone">+1 234 679 3571</string>
     <string name="sample_email">abc@gmail.com</string>
-    <string name="keep_me_sign_in">Keep me sign in</string>
+    <string name="keep_me_sign_in">Remember me</string>
     <string name="sign_in">Sign in</string>
     <string name="dont_have_an_account">Don\'t have an account?</string>
     <string name="sign_up_now">Sign Up Now!</string>

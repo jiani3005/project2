@@ -27,6 +27,19 @@
                 android:layout_height="wrap_content"
                 android:padding="20dp">
 
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="250dp"
+                    android:indeterminateDrawable="@drawable/progress_bar_style"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout7"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -35,7 +48,7 @@
                     android:hint="@string/address"
                     app:boxStrokeColor="@color/basil_green"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView6"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -52,7 +65,6 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="37dp"
                     android:layout_marginTop="5dp"
                     android:hint="@string/city"
                     app:boxStrokeColor="@color/basil_green"
@@ -72,9 +84,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout9"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                    android:layout_width="150dp"
+                    android:layout_width="180dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="37dp"
                     android:layout_marginTop="5dp"
                     android:hint="@string/state"
                     app:boxStrokeColor="@color/basil_green"
@@ -91,7 +102,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                    android:layout_width="120dp"
+                    android:layout_width="128dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:hint="@string/postcode"
@@ -117,7 +128,7 @@
                     android:hint="@string/property_status"
                     app:boxStrokeColor="@color/basil_green"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView8"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textInputLayout9"
                     app:layout_editor_absoluteX="0dp"
                     app:layout_editor_absoluteY="400dp">
@@ -126,6 +137,8 @@
                         android:id="@+id/editText_status"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/property_black"
+                        android:drawablePadding="5dp"
                         android:inputType="text"
                         android:maxLines="1" />
 
@@ -140,13 +153,15 @@
                     android:hint="@string/purchase_price"
                     app:boxStrokeColor="@color/basil_green"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView7"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textInputLayout10">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editText_price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/tag_black"
+                        android:drawablePadding="5dp"
                         android:inputType="number"
                         android:maxLines="1" />
 
@@ -160,53 +175,37 @@
                     android:hint="@string/mortgage_info"
                     app:boxStrokeColor="@color/basil_green"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/imageView9"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textInputLayout11">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editText_mortgage_info"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/info_black"
+                        android:drawablePadding="5dp"
                         android:inputType="text"
                         android:maxLines="1" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageView
-                    android:id="@+id/imageView6"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/place" />
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/imageView8"-->
+                <!--                    android:layout_width="36dp"-->
+                <!--                    android:layout_height="36dp"-->
+                <!--                    android:layout_marginTop="15dp"-->
+                <!--                    android:src="@drawable/property_black"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout9" />-->
 
-                <ImageView
-                    android:id="@+id/imageView8"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_marginTop="15dp"
-                    android:src="@drawable/property_black"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout9" />
-
-                <ImageView
-                    android:id="@+id/imageView7"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_marginTop="15dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout10"
-                    app:srcCompat="@drawable/tag_black" />
-
-                <ImageView
-                    android:id="@+id/imageView9"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_marginTop="15dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout11"
-                    app:srcCompat="@drawable/info_black" />
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/imageView9"-->
+                <!--                    android:layout_width="36dp"-->
+                <!--                    android:layout_height="36dp"-->
+                <!--                    android:layout_marginTop="15dp"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout11"-->
+                <!--                    app:srcCompat="@drawable/info_black" />-->
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -227,19 +226,6 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView2" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminateDrawable="@drawable/progress_bar_style"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

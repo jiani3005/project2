@@ -48,6 +48,11 @@
 
     </style>
 
+<!--    <style name="Google" parent="Theme.AppCompat.Light.NoActionBar">-->
+<!--        <item name="android:background">@drawable/google_login_button</item>-->
+<!--        <item name="buttonStyle">@drawable/google_login_button</item>-->
+<!--    </style>-->
+
 
 
 </resources>

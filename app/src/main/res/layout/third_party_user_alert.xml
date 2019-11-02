@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="24dp"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="4dp">
+
+<!--        <TextView-->
+<!--            android:id="@+id/textView15"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Select Type of User"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="20sp"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Welcome!\nBased on our record, you're the first time user for our app. Please choose the type of user you want to become in order to continue."
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup_googleUserChoice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView17">
+
+            <RadioButton
+                android:id="@+id/radioButton_googleTenant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tenant" />
+
+            <RadioButton
+                android:id="@+id/radioButton_googleLandlord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/landlord" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/textView_googleUser_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:text="BACK"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textView_googleUser_confirm"
+            app:layout_constraintEnd_toStartOf="@+id/textView_googleUser_confirm" />
+
+        <TextView
+            android:id="@+id/textView_googleUser_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="CONFIRM"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup_googleUserChoice" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

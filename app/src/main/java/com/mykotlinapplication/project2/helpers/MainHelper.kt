@@ -9,5 +9,7 @@ interface MainHelper {
     fun goToLandlordActivity()
     fun goToTermsAndConditions()
     fun setUpNotification()
+    fun loginWithFirebase()
+    fun showAlertDialog()
 
 }

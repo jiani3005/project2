@@ -8,7 +8,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.mykotlinapplication.project2.MyApplication
 import kotlin.Exception
 
-object GeocoderAsync: AsyncTask<String, Unit, LatLng>() {
+class GeocoderAsync: AsyncTask<String, Unit, LatLng>() {
 
     private val TAG = "GeocoderAsync"
 

@@ -1,25 +1,14 @@
 package com.mykotlinapplication.project2.viewmodels
 
-import android.location.Address
-import android.location.Geocoder
-import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mykotlinapplication.project2.MyApplication
 import com.mykotlinapplication.project2.models.LandlordProperty
 import com.mykotlinapplication.project2.models.Tenant
 import com.mykotlinapplication.project2.repositories.LandlordRepository
 import com.mykotlinapplication.project2.utilities.AddPropertyListener
 import com.mykotlinapplication.project2.utilities.AddTenantListener
-import java.lang.Exception
-import com.google.android.gms.maps.model.LatLng
-import com.mykotlinapplication.project2.models.GeocoderAsync
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-
 
 class LandlordViewModel: ViewModel() {
 
@@ -81,7 +70,7 @@ class LandlordViewModel: ViewModel() {
         } else if (mortgageInfo.isNullOrEmpty()) {
             addPropertyListener?.setMortgageInfoError()
         } else {
-            isUpdating = repo.getIsUpdating()
+//            isUpdating = repo.getIsUpdating()
             isSuccess = repo.addProperty(address, city, state, country, property_status, price, mortgageInfo)
 
         }
@@ -90,19 +79,20 @@ class LandlordViewModel: ViewModel() {
     }
 
     fun deleteProperty(): LiveData<Boolean> {
-        isUpdating = repo.getIsUpdating()
+//        isUpdating = repo.getIsUpdating()
         return repo.deleteProperty(selectedProperty.value!!.id)
     }
 
-    fun updatePropertyList() {
-        var propertyArray = property_list.value!!
-        val index = propertyArray.indexOf(selectedProperty.value!!)
-        propertyArray.removeAt(index)
-
-        property_list.postValue(propertyArray)
-    }
+//    fun updatePropertyList() {
+//        var propertyArray = property_list.value!!
+//        val index = propertyArray.indexOf(selectedProperty.value!!)
+//        propertyArray.removeAt(index)
+//
+//        property_list.postValue(propertyArray)
+//    }
 
     fun getTenants(): LiveData<ArrayList<Tenant>> {
+//        isUpdating = repo.getIsUpdating()
         tenant_list.value = arrayListOf()
         tenant_list = repo.getTenants()
 
@@ -135,7 +125,7 @@ class LandlordViewModel: ViewModel() {
         } else {
             var fullAddress = "${capitalizeEachWord(address)}\n${capitalizeEachWord(city)}, ${state.toUpperCase()} $postcode"
 
-            isUpdating = repo.getIsUpdating()
+//            isUpdating = repo.getIsUpdating()
             isSuccess = repo.addTenant(capitalizeEachWord(name), email, fullAddress, phone, propertyId)
 //            compositeDisposable.add(repo.addTenant(capitalizeEachWord(name), email, fullAddress, phone, propertyId)
 //                .subscribeOn(Schedulers.io())
@@ -166,6 +156,7 @@ class LandlordViewModel: ViewModel() {
     }
 
     fun getIsUpdating(): LiveData<Boolean> {
+        isUpdating = repo.getIsUpdating()
         return isUpdating
     }
 

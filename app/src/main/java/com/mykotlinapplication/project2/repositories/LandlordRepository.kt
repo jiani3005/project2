@@ -2,6 +2,7 @@ package com.mykotlinapplication.project2.repositories
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.mykotlinapplication.project2.models.*
@@ -13,24 +14,23 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Exception
-import kotlin.random.Random
 
 object LandlordRepository {
 
-    private val TAG = "LandlordRepository"
+    private const val TAG = "LandlordRepository"
     private val sharedPreferences = SharedPreferencesManager
     private val apiInterface = ApiClient.getApiInterface()
     private val imageDatabase = ImageDatabase.getImageDatabaseInstance().imageDao()
     private val isUpdating = MutableLiveData<Boolean>()
     private val propertyImages = imageDatabase.getImageFromCategory("property")
     private val tenantImages = imageDatabase.getImageFromCategory("tenant")
-    private val testingId = sharedPreferences.getUserId()
+    private val userId = sharedPreferences.getUserId()
 
     fun getProperty(): MutableLiveData<ArrayList<LandlordProperty>> {
         var propertyList = MutableLiveData<ArrayList<LandlordProperty>>()
         isUpdating.value = true
 
-        apiInterface.getLandlordProperty(testingId, sharedPreferences.getUserType()).enqueue(object: Callback<JsonElement> {
+        apiInterface.getLandlordProperty(userId, sharedPreferences.getUserType()).enqueue(object: Callback<JsonElement> {
             override fun onFailure(call: Call<JsonElement>, t: Throwable) {
                 isUpdating.value = false
                 Log.d(TAG, "getProperty onFailure: $t")
@@ -56,17 +56,6 @@ object LandlordRepository {
                                 propertyArray.add(newProperty)
 //                                Log.d(TAG, newProperty.toString())
 
-//                                var id = property["id"].asString
-//                                var address = property["propertyaddress"].asString.capitalize()
-//                                var city = property["propertycity"].asString.capitalize()
-//                                var state = property["propertystate"].asString.capitalize()
-//                                var country = property["propertycountry"].asString.capitalize()
-//                                var status = property["propertystatus"].asString.capitalize()
-//                                var price = property["propertypurchaseprice"].asString
-//                                var mortgageInfo = property["propertymortageinfo"].asString.capitalize()
-//
-//                                propertyArray.add(LandlordProperty(id, address, city, state, country, status, price, mortgageInfo))
-//                                Log.i(TAG, "${LandlordProperty(id, address, city, state, country, status, price)}")
                             }
 
                             propertyList.value = propertyArray
@@ -90,7 +79,7 @@ object LandlordRepository {
     fun addProperty(address: String, city: String, state: String, country: String, property_status: String, price: String, mortgageInfo: String): MutableLiveData<Boolean> {
         var isSuccess = MutableLiveData<Boolean>()
 
-        val userId = testingId
+        val userId = userId
         val userType = sharedPreferences.getUserType()
 
         isUpdating.value = true
@@ -100,42 +89,47 @@ object LandlordRepository {
 
         var latitude = ""
         var longitude = ""
-        var location = GeocoderAsync.execute(fullAddress).get()
+        var location: LatLng? = GeocoderAsync().execute(fullAddress).get()
         Log.d(TAG, "location = $location")
 
         if (location != null) {
             latitude = location.latitude.toString()
             longitude = location.longitude.toString()
+
+            apiInterface.addProperty(address, city, state, country, property_status, price, mortgageInfo, userId, userType, latitude, longitude).enqueue(object: Callback<JsonElement> {
+                override fun onFailure(call: Call<JsonElement>, t: Throwable) {
+                    Log.e(TAG, "addProperty() onFailure: $t")
+                }
+
+                override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
+                    if (response.isSuccessful) {
+
+                        Log.d(TAG, "response = ${response.body()}")
+
+                        if (response.body()!!.isJsonObject) {
+                            try {
+                                val responseJsonObject = response.body()!!.asJsonObject
+                                val msgArray = responseJsonObject["msg"].asJsonArray
+
+                                isSuccess.value = msgArray[0].asString == "successfully added"
+
+                            } catch (e: Exception) {
+                                Log.e(TAG,"addProperty() failed to get result")
+                            }
+                        }
+
+                    } else {
+                        Log.e(TAG, "addProperty() response failure: ${response.errorBody()}")
+                    }
+                    isUpdating.value = false
+                }
+            })
+        } else {
+            isSuccess.value = false
+            isUpdating.value = false
         }
 
-        apiInterface.addProperty(address, city, state, country, property_status, price, mortgageInfo, userId, userType, latitude, longitude).enqueue(object: Callback<JsonElement> {
-            override fun onFailure(call: Call<JsonElement>, t: Throwable) {
-                Log.e(TAG, "addProperty() onFailure: $t")
-            }
 
-            override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
-                if (response.isSuccessful) {
-
-                    Log.d(TAG, "response = ${response.body()}")
-
-                    if (response.body()!!.isJsonObject) {
-                        try {
-                            val responseJsonObject = response.body()!!.asJsonObject
-                            val msgArray = responseJsonObject["msg"].asJsonArray
-
-                            isSuccess.value = msgArray[0].asString == "successfully added"
-
-                        } catch (e: Exception) {
-                            Log.e(TAG,"addProperty() failed to get result")
-                        }
-                    }
-
-                } else {
-                    Log.e(TAG, "addProperty() response failure: ${response.errorBody()}")
-                }
-                isUpdating.value = false
-            }
-        })
 
         return isSuccess
     }
@@ -185,7 +179,7 @@ object LandlordRepository {
         var tenants = MutableLiveData<ArrayList<Tenant>>()
 
         isUpdating.value = true
-        apiInterface.getTenants(testingId).enqueue(object: Callback<JsonElement> {
+        apiInterface.getTenants(userId).enqueue(object: Callback<JsonElement> {
             override fun onFailure(call: Call<JsonElement>, t: Throwable) {
                 Log.e(TAG, "getTenants() onFailure: $t")
             }
@@ -243,7 +237,7 @@ object LandlordRepository {
         var isSuccess = MutableLiveData<Boolean>()
 
         isUpdating.value = true
-        apiInterface.addTenant(name, email, address, phone, propertyId, testingId).enqueue(object: Callback<ResponseBody> {
+        apiInterface.addTenant(name, email, address, phone, propertyId, userId).enqueue(object: Callback<ResponseBody> {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Log.e(TAG, "addTenant() onFailure: $t")
             }

@@ -27,10 +27,9 @@ class PropertyDetailsFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_listing_detail, container, false)
         binding.textViewAddTenant.visibility = View.VISIBLE
+        binding.buttonDelete.visibility = View.VISIBLE
 //        binding.buttonShare.performClick()
         landlordActivity.editAppBar("Property Details", true)
-
-//        val property: LandlordProperty = arguments?.getParcelable("property")!!
 
         landlordActivity.viewModel.getSelectedProperty().observe(landlordActivity, Observer { selectedProperty ->
             Glide.with(landlordActivity).load(selectedProperty.image).into(binding.imageViewHouse)
@@ -42,6 +41,10 @@ class PropertyDetailsFragment: Fragment() {
             binding.textViewAddTenant.setOnClickListener {
 //                Toast.makeText(landlordActivity, "LandlordProperty ID = ${selectedProperty.id}", Toast.LENGTH_SHORT).show()
                 landlordActivity.goToAddTenant()
+            }
+
+            binding.buttonDelete.setOnClickListener {
+                landlordActivity.deleteProperty()
             }
         })
 

@@ -5,6 +5,7 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.mykotlinapplication.project2.utilities.LoginListener
 import com.mykotlinapplication.project2.utilities.RegisterListener
 import com.mykotlinapplication.project2.repositories.MainRepository
@@ -137,6 +138,10 @@ class MainViewModel: ViewModel() {
         return isSuccess
     }
 
+    fun userGoogleLogin(gooleAcct: GoogleSignInAccount) {
+        repo.userGoogleLogin(gooleAcct)
+    }
+
     fun checkLoginSession(): LiveData<Boolean?> {
         return repo.checkLoginSession()
     }
@@ -148,6 +153,14 @@ class MainViewModel: ViewModel() {
 
     fun getIsUpdating(): LiveData<Boolean> {
         return repo.getIsUpdating()
+    }
+
+    fun getIsGoogleSignInSuccess(): LiveData<Map<String, String>> {
+        return repo.getGoogleSignInResult()
+    }
+
+    fun registerGoogleUserOnApi(userType: String) {
+        return repo.registerGoogleUserOnApi(userType)
     }
 
 }

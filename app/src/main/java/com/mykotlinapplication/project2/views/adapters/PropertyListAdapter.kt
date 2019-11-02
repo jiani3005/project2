@@ -52,14 +52,14 @@ class PropertyListAdapter(var items: ArrayList<LandlordProperty>): RecyclerView.
     }
 
 
-    inner class PropertyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener, View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
+    inner class PropertyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         val image = binding.imageViewHouse
         val price = binding.textViewPrice
         val address = binding.textViewAddress
 
         private val item = binding.propertyItem.setOnClickListener(this)
-        private val itemContextMenu = binding.propertyItem.setOnCreateContextMenuListener(this)
+//        private val itemContextMenu = binding.propertyItem.setOnCreateContextMenuListener(this)
         private val landlordActivity = context as LandlordActivity
 
         override fun onClick(v: View) {
@@ -71,21 +71,21 @@ class PropertyListAdapter(var items: ArrayList<LandlordProperty>): RecyclerView.
 
             }
         }
-
-        override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-            val delete = menu?.add(Menu.NONE, 1, 1, "Delete property")
-            delete?.setOnMenuItemClickListener(this)
-        }
-
-        override fun onMenuItemClick(item: MenuItem): Boolean {
-            when (item.itemId) {
-                1 -> {
-                    landlordActivity.viewModel.setSelectedProperty(items[adapterPosition])
-                    landlordActivity.deleteProperty()
-                }
-            }
-            return true
-        }
+//
+//        override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+//            val delete = menu?.add(Menu.NONE, 1, 1, "Delete property")
+//            delete?.setOnMenuItemClickListener(this)
+//        }
+//
+//        override fun onMenuItemClick(item: MenuItem): Boolean {
+//            when (item.itemId) {
+//                1 -> {
+//                    landlordActivity.viewModel.setSelectedProperty(items[adapterPosition])
+//                    landlordActivity.deleteProperty()
+//                }
+//            }
+//            return true
+//        }
 
     }
 }

@@ -86,9 +86,9 @@ class LandlordActivity : AppCompatActivity(), LandlordHelper {
             setPositiveButton("Yes") {dialog, which ->
                 viewModel.deleteProperty().observe(this@LandlordActivity, Observer { isSuccess ->
                     if (isSuccess) {
-                        viewModel.updatePropertyList()
-                        Toast.makeText(this@LandlordActivity, "LandlordProperty is deleted!", Toast.LENGTH_SHORT).show()
-//                        viewModel.deleteSuccessProperty()
+//                        viewModel.updatePropertyList()
+                        Toast.makeText(this@LandlordActivity, "Property is deleted!", Toast.LENGTH_SHORT).show()
+                        goToProperty()
                     } else {
                         Toast.makeText(this@LandlordActivity, "Fail to delete property. Please try again!", Toast.LENGTH_SHORT).show()
                     }

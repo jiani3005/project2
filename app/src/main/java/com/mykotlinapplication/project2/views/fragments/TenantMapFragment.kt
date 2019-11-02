@@ -65,9 +65,9 @@ class TenantMapFragment: Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        binding.progressBarLayout.visibility = View.VISIBLE
         map = googleMap
         map.uiSettings.isZoomControlsEnabled = true
-
 
         val apolis = LatLng(41.917300, -88.264400)
 
@@ -91,6 +91,7 @@ class TenantMapFragment: Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         })
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(apolis, 10.0f))
+        binding.progressBarLayout.visibility = View.GONE
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
