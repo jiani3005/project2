@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.mykotlinapplication.project2.models.*
 import com.mykotlinapplication.project2.models.databases.ApiClient
+import com.mykotlinapplication.project2.models.databases.FirebaseAuthManager
 import com.mykotlinapplication.project2.models.databases.ImageDatabase
 import com.mykotlinapplication.project2.models.databases.SharedPreferencesManager
 import okhttp3.ResponseBody
@@ -277,7 +278,11 @@ object LandlordRepository {
     }
 
     fun clearLoginSession() {
-        SharedPreferencesManager.clearLoginSession()
+        sharedPreferences.clearLoginSession()
+        if (sharedPreferences.getIsFirebaseUser()) {
+            Log.d(TAG, "Signing out Firebase user")
+            FirebaseAuthManager.signOutUser()
+        }
     }
 
     fun getIsUpdating(): MutableLiveData<Boolean> {

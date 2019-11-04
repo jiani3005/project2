@@ -2,8 +2,10 @@ package com.mykotlinapplication.project2.repositories
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.maps.model.LatLng
 import com.mykotlinapplication.project2.models.*
 import com.mykotlinapplication.project2.models.databases.ApiClient
+import com.mykotlinapplication.project2.models.databases.FirebaseAuthManager
 import com.mykotlinapplication.project2.models.databases.ImageDatabase
 import com.mykotlinapplication.project2.models.databases.SharedPreferencesManager
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -82,7 +84,11 @@ object TenantRepository {
     }
 
     fun clearLoginSession() {
-        SharedPreferencesManager.clearLoginSession()
+        sharedPreferences.clearLoginSession()
+        if (sharedPreferences.getIsFirebaseUser()) {
+            Log.d(TAG, "Signing out Firebase user")
+            FirebaseAuthManager.signOutUser()
+        }
     }
 
     fun getIsUpdating(): MutableLiveData<Boolean> {

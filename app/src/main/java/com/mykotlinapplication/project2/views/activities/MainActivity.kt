@@ -5,7 +5,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,20 +15,23 @@ import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.ActivityMainBinding
-import com.mykotlinapplication.project2.databinding.ThirdPartyUserAlertBinding
 import com.mykotlinapplication.project2.helpers.MainHelper
 import com.mykotlinapplication.project2.viewmodels.MainViewModel
 import com.mykotlinapplication.project2.views.fragments.ForgotPasswordFragment
 import com.mykotlinapplication.project2.views.fragments.LoginFragment
 import com.mykotlinapplication.project2.views.fragments.RegisterFragment
 import com.mykotlinapplication.project2.views.fragments.TermsAndConditionsFragment
-import kotlinx.android.synthetic.main.third_party_user_alert.*
+import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.third_party_user_alert.view.*
 
 class MainActivity : AppCompatActivity(), MainHelper {
@@ -39,6 +41,9 @@ class MainActivity : AppCompatActivity(), MainHelper {
     private val TAG = "MainActivity"
     private lateinit var googleSignInClient: GoogleSignInClient
     private val RC_GOOGLE_SIGN_IN = 101
+    private lateinit var fbCallbackManager: CallbackManager
+    lateinit var dialog: AlertDialog
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +52,8 @@ class MainActivity : AppCompatActivity(), MainHelper {
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        fbCallbackManager = CallbackManager.Factory.create()
 
         viewModel.checkLoginSession().observe(this, Observer { isSessionExists ->
 //            Log.d(TAG, "isSessionExist = $isSessionExists")
@@ -88,13 +95,34 @@ class MainActivity : AppCompatActivity(), MainHelper {
         startActivity(Intent(this, LandlordActivity::class.java))
     }
 
-    override fun loginWithFirebase() {
+    override fun loginWithGoogle() {
         val signInGoogleIntent = googleSignInClient.signInIntent
         startActivityForResult(signInGoogleIntent, RC_GOOGLE_SIGN_IN)
     }
 
+    override fun loginWithFacebook() {
+        fb_login_button.setReadPermissions("email", "public_profile")
+        fb_login_button.registerCallback(fbCallbackManager, object : FacebookCallback<LoginResult> {
+            override fun onSuccess(loginResult: LoginResult) {
+                Log.d(TAG, "facebook:onSuccess:$loginResult")
+                viewModel.userFacebookLogin(loginResult.accessToken)
+            }
+
+            override fun onCancel() {
+                Log.d(TAG, "facebook:onCancel")
+                // ...
+            }
+
+            override fun onError(error: FacebookException) {
+                Log.d(TAG, "facebook:onError", error)
+                // ...
+            }
+        })
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        fbCallbackManager.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RC_GOOGLE_SIGN_IN) {
             val task  = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -108,13 +136,17 @@ class MainActivity : AppCompatActivity(), MainHelper {
     }
 
     override fun showAlertDialog() {
+        if (::dialog.isInitialized) {
+            dialog.dismiss()
+        }
+
         val dialogView = LayoutInflater.from(this).inflate(R.layout.third_party_user_alert, null)
 
         val builder = AlertDialog.Builder(this).apply {
             setTitle("Select Type of User")
             setView(dialogView)
         }
-        val dialog = builder.show()
+        dialog = builder.show()
 
         dialogView.textView_googleUser_confirm.setOnClickListener {
             if (dialogView.radioGroup_googleUserChoice.checkedRadioButtonId == -1) {
@@ -122,9 +154,11 @@ class MainActivity : AppCompatActivity(), MainHelper {
                 dialogView.radioGroup_googleUserChoice.requestFocus()
             } else if (dialogView.radioButton_googleTenant.isChecked) {
                 Toast.makeText(this@MainActivity, "tenant selected", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
                 viewModel.registerGoogleUserOnApi("tenant")
             } else if (dialogView.radioButton_googleLandlord.isChecked) {
                 Toast.makeText(this@MainActivity, "landlord selected", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
                 viewModel.registerGoogleUserOnApi("landlord")
             }
         }
@@ -179,4 +213,6 @@ class MainActivity : AppCompatActivity(), MainHelper {
         }
 
     }
+
+
 }

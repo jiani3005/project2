@@ -1,12 +1,14 @@
 package com.mykotlinapplication.project2.models.databases
 
 import android.content.Context
+import android.util.Log
 import com.mykotlinapplication.project2.MyApplication
 
 object SharedPreferencesManager {
 
     private val sharedPreferences = MyApplication.context.getSharedPreferences("AvantGarde", Context.MODE_PRIVATE)
     private val editor = sharedPreferences.edit()
+    private val TAG = "SharedPreferencesManager"
 
     fun setLoginSession(userId: String, userType: String, userEmail: String, appApiKey: String) {
         editor.putString("user.id", userId)
@@ -52,7 +54,18 @@ object SharedPreferencesManager {
         editor.putString("user.type", "")
         editor.putString("user.email", "")
         editor.putString("user.appApiKey", "")
+        editor.putBoolean("user.firebase", false)
         editor.commit()
+        Log.d(TAG, "Clearing login session")
+    }
+
+    fun setIsFirebaseUser(isFirebaseUser: Boolean) {
+        editor.putBoolean("user.firebase", isFirebaseUser)
+        editor.commit()
+    }
+
+    fun getIsFirebaseUser(): Boolean {
+        return sharedPreferences.getBoolean("user.firebase", false)
     }
 
 }

@@ -3,6 +3,8 @@ package com.mykotlinapplication.project2.repositories
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.facebook.AccessToken
+import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -191,7 +193,7 @@ object MainRepository {
         isUpdating.value = true
         var result = mutableMapOf<String, String>()
 
-        disposables.add(firebaseAuthManager.userLogin(gooleAcct)
+        disposables.add(firebaseAuthManager.googleUserLogin(gooleAcct)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ // receive success callback
@@ -212,12 +214,40 @@ object MainRepository {
 
     }
 
+    fun userFacebookLogin(accessToken: AccessToken) {
+        isUpdating.value = true
+        var result = mutableMapOf<String, String>()
+        disposables.add(firebaseAuthManager.facebookUserLogin(accessToken)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ // receive success callback
+//                Log.d(TAG, "current user = ${FirebaseAuth.getInstance().currentUser!!.providerData[1].email}")
+                loginGoogleUserOnApi()
+//                result["isSuccess"] = "true"
+//                result["msg"] = "Login success!"
+//                isUpdating.value = false
+//                googleSignInResult.value = result
+            }, { throwable ->
+                result["isSuccess"] = "false"
+                result["msg"] = "Login failed"
+                isUpdating.value = false
+                googleSignInResult.value = result
+                Log.e(TAG, "userGoogleLogin() throwable: $throwable")
+            }))
+    }
+
     private fun loginGoogleUserOnApi() {
-        var googleUser = FirebaseAuth.getInstance().currentUser!!
+
+
+        var userEmail = FirebaseAuth.getInstance().currentUser!!.email
+        if (userEmail == null) {
+            userEmail = FirebaseAuth.getInstance().currentUser!!.providerData[1].email
+        }
+
         var result = mutableMapOf<String, String>()
 
         isUpdating.value = true
-        apiInterface.userLogin(googleUser.email!!, googleUser.email!!).enqueue(object: Callback<JsonElement> {
+        apiInterface.userLogin(userEmail!!, userEmail!!).enqueue(object: Callback<JsonElement> {
             override fun onFailure(call: Call<JsonElement>, t: Throwable) {
                 result["isSuccess"] = "false"
                 result["msg"] = "Account is suspended.\nPlease try again in 5 minutes"
@@ -246,6 +276,8 @@ object MainRepository {
                                 val appApiKey = responseJsonObject["appapikey"].asString
 
                                 sharedPreferences.setLoginSession(userId, userType, userEmail, appApiKey)
+                                sharedPreferences.setIsFirebaseUser(true)
+
 
                                 result["isSuccess"] = "true"
                                 result["msg"] = userType
@@ -262,6 +294,7 @@ object MainRepository {
                                     "Email is not register" -> {
                                         result["isSuccess"] = "false"
                                         result["msg"] = "New User"
+//                                        Log.d(TAG, "here")
                                     }
                                     "0" -> {
                                         result["isSuccess"] = "false"
@@ -297,12 +330,17 @@ object MainRepository {
 
     }
 
+
     fun registerGoogleUserOnApi(userType: String) {
-        var googleUserEmail = FirebaseAuth.getInstance().currentUser!!.email!!
+        var googleUserEmail = FirebaseAuth.getInstance().currentUser!!.email
+        if (googleUserEmail == null) {
+            googleUserEmail = FirebaseAuth.getInstance().currentUser!!.providerData[1].email
+        }
+
         var result = mutableMapOf<String, String>()
         isUpdating.value = true
 
-        apiInterface.userRegister(googleUserEmail, googleUserEmail, googleUserEmail, userType).enqueue(object : Callback<ResponseBody> {
+        apiInterface.userRegister(googleUserEmail!!, googleUserEmail, googleUserEmail, userType).enqueue(object : Callback<ResponseBody> {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 result["isSuccess"] = "false"
                 result["msg"] = "register error"

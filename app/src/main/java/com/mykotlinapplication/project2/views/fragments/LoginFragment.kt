@@ -34,6 +34,7 @@ class LoginFragment: Fragment(), LoginListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
 
+
         mainActivity.viewModel.loadLoginInfo().observe(mainActivity, Observer {
             binding.editTextEmail.setText(it[0].toString())
             binding.editTextPassword.setText(it[1].toString())
@@ -49,6 +50,29 @@ class LoginFragment: Fragment(), LoginListener {
 
         })
 
+        mainActivity.viewModel.getIsGoogleSignInSuccess().observe(mainActivity, Observer { response ->
+            var isSuccess = response["isSuccess"]
+            var msg = response["msg"]
+            Log.d(TAG, response.toString())
+
+            if (isSuccess == "true") {
+                onSuccess()
+                if (msg == "tenant") {
+
+                    mainActivity.goToTenantActivity()
+                } else {
+                    mainActivity.goToLandlordActivity()
+                }
+            } else {
+                if (msg == "New User") {
+                    //show dialog box to choose tenant or landlord
+                    mainActivity.showAlertDialog()
+                } else if (msg != ""){
+                    onFailure(msg!!)
+                }
+            }
+        })
+
         binding.buttonLogin.setOnClickListener {
 //            var isTenant = mainActivity.viewModel.userLogin(binding.editTextEmail.text.toString(), binding.editTextPassword.text.toString(), binding.checkBoxRememberMe.isChecked)
             mainActivity.viewModel.userLogin(binding.editTextEmail.text.toString(), binding.editTextPassword.text.toString(), binding.checkBoxRememberMe.isChecked).observe(mainActivity,
@@ -56,6 +80,8 @@ class LoginFragment: Fragment(), LoginListener {
                     val r = response
                     var isSuccess = response["isSuccess"]
                     var msg = response["msg"]
+
+                    Log.d(TAG, "app user routine")
 
                     if (isSuccess == "true") {
                         onSuccess()
@@ -81,32 +107,13 @@ class LoginFragment: Fragment(), LoginListener {
         }
 
         binding.googleLayout.setOnClickListener {
-            mainActivity.loginWithFirebase()
-
-            mainActivity.viewModel.getIsGoogleSignInSuccess().observe(mainActivity, Observer { response ->
-                var isSuccess = response["isSuccess"]
-                var msg = response["msg"]
-
-                if (isSuccess == "true") {
-                    onSuccess()
-                    if (msg == "tenant") {
-                        mainActivity.goToTenantActivity()
-                    } else {
-                        mainActivity.goToLandlordActivity()
-                    }
-                } else {
-                    if (msg == "New User") {
-                        //show dialog box to choose tenant or landlord
-                        mainActivity.showAlertDialog()
-                    } else {
-                        onFailure(msg!!)
-                    }
-                }
-            })
+            mainActivity.loginWithGoogle()
         }
 
         binding.facebookLayout.setOnClickListener {
+            binding.fbLoginButton.performClick()
             Log.d(TAG, "facebook clicked!")
+            mainActivity.loginWithFacebook()
         }
 
         return binding.root

@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">AvantGarde</string>
+    <string name="facebook_app_id">439766510008971</string>
+    <string name="fb_login_protocol_scheme">fb439766510008971</string>
     <string name="t_and_c_text">Thank you for using Avant Garde! These terms of service (\"Term\") cover your use and access to the services, client software and website (\"Services\") provided by Avant Garde. Our Privacy Policy explains how we collect and use your information while our Acceptable Use Policy outlines your responsibilities when using our Services. By using our Services, you\'re agreeing to be bound by these Terms, and to review our Privacy and Acceptable Use policies. If you\'re using our Services for an organization, you\'re agreeing to these Terms on behalf of that organization.</string>
     <string name="done">Done</string>
     <string name="terms_and_conditions">Terms and Conditions</string>

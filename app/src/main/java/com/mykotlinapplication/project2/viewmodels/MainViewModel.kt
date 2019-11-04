@@ -5,6 +5,7 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.mykotlinapplication.project2.utilities.LoginListener
 import com.mykotlinapplication.project2.utilities.RegisterListener
@@ -140,6 +141,10 @@ class MainViewModel: ViewModel() {
 
     fun userGoogleLogin(gooleAcct: GoogleSignInAccount) {
         repo.userGoogleLogin(gooleAcct)
+    }
+
+    fun userFacebookLogin(accessToken: AccessToken) {
+        repo.userFacebookLogin(accessToken)
     }
 
     fun checkLoginSession(): LiveData<Boolean?> {
