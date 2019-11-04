@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), MainHelper {
                     goToLandlordActivity()
                 }
             } else {
-                supportFragmentManager.beginTransaction().replace(R.id.main_fragment_container, LoginFragment()).commit()
+                supportFragmentManager.beginTransaction().add(R.id.main_fragment_container, LoginFragment()).commit()
             }
         })
 
@@ -88,6 +88,7 @@ class MainActivity : AppCompatActivity(), MainHelper {
     }
 
     override fun goToTenantActivity() {
+
         startActivity(Intent(this, TenantActivity::class.java))
     }
 
