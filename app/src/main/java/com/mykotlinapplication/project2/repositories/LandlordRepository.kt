@@ -10,11 +10,16 @@ import com.mykotlinapplication.project2.models.databases.ApiClient
 import com.mykotlinapplication.project2.models.databases.FirebaseAuthManager
 import com.mykotlinapplication.project2.models.databases.ImageDatabase
 import com.mykotlinapplication.project2.models.databases.SharedPreferencesManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Exception
+import kotlin.Exception
 
 object LandlordRepository {
 
@@ -29,7 +34,11 @@ object LandlordRepository {
 
     fun getProperty(): MutableLiveData<ArrayList<LandlordProperty>> {
         var propertyList = MutableLiveData<ArrayList<LandlordProperty>>()
-        isUpdating.value = true
+//        isUpdating.value = true
+
+//        CoroutineScope(Main).launch {
+//            propertyList.value = getLandlordProperty()
+//        }
 
         apiInterface.getLandlordProperty(userId, sharedPreferences.getUserType()).enqueue(object: Callback<JsonElement> {
             override fun onFailure(call: Call<JsonElement>, t: Throwable) {
@@ -44,6 +53,7 @@ object LandlordRepository {
 
                     if (response.body()!!.isJsonObject) {
                         try {
+
                             val responseJsonObject = response.body()!!.asJsonObject
                             val propertyJsonArray = responseJsonObject.getAsJsonArray("Property")
 
@@ -55,11 +65,12 @@ object LandlordRepository {
                                 var newProperty = gson.fromJson(property, LandlordProperty::class.java)
                                 newProperty.image = propertyImages[i % propertyImages.size].imageLink
                                 propertyArray.add(newProperty)
-//                                Log.d(TAG, newProperty.toString())
 
                             }
 
                             propertyList.value = propertyArray
+
+                            isUpdating.value = false
 
                         } catch (e: Exception) {
                             Log.e(TAG, "transformation failed")
@@ -69,7 +80,7 @@ object LandlordRepository {
                 } else {
                     Log.e(TAG, "getProperty response failure: ${response.errorBody()}")
                 }
-                isUpdating.value = false
+
             }
 
         })
@@ -203,13 +214,6 @@ object LandlordRepository {
                                 newTenant.image = tenantImages[i % tenantImages.size].imageLink
                                 tenantArrayList.add(newTenant)
 
-//                                var id = tenant["id"].asString
-//                                var name = tenant["tenantname"].asString
-//                                var email = tenant["tenantemail"].asString
-//                                var address = tenant["tenantaddress"].asString
-//                                var phone = tenant["tenantmobile"].asString
-//
-//                                tenantArrayList.add(Tenant(id, name, email, address, phone))
                             }
                             tenants.value = tenantArrayList
 
@@ -278,15 +282,39 @@ object LandlordRepository {
     }
 
     fun clearLoginSession() {
-        sharedPreferences.clearLoginSession()
         if (sharedPreferences.getIsFirebaseUser()) {
             Log.d(TAG, "Signing out Firebase user")
             FirebaseAuthManager.signOutUser()
         }
+        sharedPreferences.clearLoginSession()
     }
 
     fun getIsUpdating(): MutableLiveData<Boolean> {
         return isUpdating
     }
+
+//    private suspend fun getLandlordProperty(): ArrayList<LandlordProperty> {
+//        var propertyList = ArrayList<LandlordProperty>()
+//        isUpdating.value = true
+//
+//        withContext(IO) {
+//            try {
+//                val response = apiInterface.getLandlordProperty(userId, sharedPreferences.getUserType())
+//                propertyList = response.landlordPropertyList
+//
+//                for (i in propertyList.indices) {
+//                    propertyList[i].image = propertyImages[i % propertyImages.size].imageLink
+////                    Log.d(TAG, propertyList[i].toString())
+//                    propertyList.add(propertyList[i])
+//                }
+//
+//            } catch (e: Exception) {
+//                Log.e(TAG, "getLandlordProperty(): $e")
+//            }
+//        }
+//
+//        isUpdating.value = false
+//        return propertyList
+//    }
 
 }

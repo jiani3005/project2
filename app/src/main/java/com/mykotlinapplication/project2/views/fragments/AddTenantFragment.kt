@@ -100,11 +100,13 @@ class AddTenantFragment: Fragment(), AddTenantListener {
     }
 
     private fun onFailure() {
-        Toast.makeText(landlordActivity, "Fail to add.\nPlease try a different email.", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(landlordActivity, "Fail to add.\nPlease try a different email.", Toast.LENGTH_SHORT).show()
+        landlordActivity.showSnackbar("Fail to add.\nPlease try a different email.")
     }
 
     private fun onSuccess() {
-        Toast.makeText(landlordActivity, "Successfully added!", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(landlordActivity, "Successfully added!", Toast.LENGTH_SHORT).show()
+        landlordActivity.showSnackbar("Successfully added!")
     }
 
 }

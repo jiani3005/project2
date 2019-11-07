@@ -36,7 +36,7 @@ object MainRepository {
     private val isUpdating = MutableLiveData<Boolean>()
 //    private val isGoogleSignInSuccess = MutableLiveData<Boolean>()
     private val disposables = CompositeDisposable()
-    private val googleSignInResult = MutableLiveData<Map<String, String>>()
+    private var googleSignInResult = MutableLiveData<Map<String, String>>()
 
     fun loadLoginInfo(): MutableLiveData<ArrayList<Any>> {
         var info = MutableLiveData<ArrayList<Any>>()
@@ -385,6 +385,13 @@ object MainRepository {
 
     fun getIsUpdating(): MutableLiveData<Boolean> {
         return isUpdating
+    }
+
+    fun clearGoogleSignInResult() {
+        var result = mutableMapOf<String, String>()
+        result["isSuccess"] = "false"
+        result["msg"] = ""
+        googleSignInResult.postValue(result)
     }
 
 }

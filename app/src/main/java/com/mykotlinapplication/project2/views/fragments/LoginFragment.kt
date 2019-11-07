@@ -58,11 +58,11 @@ class LoginFragment: Fragment(), LoginListener {
             if (isSuccess == "true") {
                 onSuccess()
                 if (msg == "tenant") {
-
                     mainActivity.goToTenantActivity()
                 } else {
                     mainActivity.goToLandlordActivity()
                 }
+                mainActivity.viewModel.clearGoogleSignInResult()
             } else {
                 if (msg == "New User") {
                     //show dialog box to choose tenant or landlord
@@ -77,7 +77,6 @@ class LoginFragment: Fragment(), LoginListener {
 //            var isTenant = mainActivity.viewModel.userLogin(binding.editTextEmail.text.toString(), binding.editTextPassword.text.toString(), binding.checkBoxRememberMe.isChecked)
             mainActivity.viewModel.userLogin(binding.editTextEmail.text.toString(), binding.editTextPassword.text.toString(), binding.checkBoxRememberMe.isChecked).observe(mainActivity,
                 Observer { response ->
-                    val r = response
                     var isSuccess = response["isSuccess"]
                     var msg = response["msg"]
 

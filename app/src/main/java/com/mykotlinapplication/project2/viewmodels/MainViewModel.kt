@@ -168,4 +168,8 @@ class MainViewModel: ViewModel() {
         return repo.registerGoogleUserOnApi(userType)
     }
 
+    fun clearGoogleSignInResult() {
+        repo.clearGoogleSignInResult()
+    }
+
 }

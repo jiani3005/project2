@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
@@ -23,9 +24,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.material.snackbar.Snackbar
 import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.ActivityMainBinding
 import com.mykotlinapplication.project2.helpers.MainHelper
+import com.mykotlinapplication.project2.models.databases.Image
+import com.mykotlinapplication.project2.models.databases.ImageDatabase
 import com.mykotlinapplication.project2.viewmodels.MainViewModel
 import com.mykotlinapplication.project2.views.fragments.ForgotPasswordFragment
 import com.mykotlinapplication.project2.views.fragments.LoginFragment
@@ -59,15 +63,16 @@ class MainActivity : AppCompatActivity(), MainHelper {
 //            Log.d(TAG, "isSessionExist = $isSessionExists")
             if (isSessionExists != null) {
                 if (isSessionExists == true) {
+                    supportFragmentManager.beginTransaction().add(R.id.main_fragment_container, LoginFragment()).commit()
                     goToTenantActivity()
                 } else {
+                    supportFragmentManager.beginTransaction().add(R.id.main_fragment_container, LoginFragment()).commit()
                     goToLandlordActivity()
                 }
             } else {
                 supportFragmentManager.beginTransaction().add(R.id.main_fragment_container, LoginFragment()).commit()
             }
         })
-
 
     }
 
@@ -134,6 +139,15 @@ class MainActivity : AppCompatActivity(), MainHelper {
                 Log.e("FirebaseAuth", "Google sign in failed")
             }
         }
+    }
+
+    override fun showSnackbar(message: String) {
+        val snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).setActionTextColor(resources.getColor(R.color.white))
+        snackbar.setAction("Dismiss") {
+            snackbar.dismiss()
+        }
+        snackbar.show()
+
     }
 
     override fun showAlertDialog() {

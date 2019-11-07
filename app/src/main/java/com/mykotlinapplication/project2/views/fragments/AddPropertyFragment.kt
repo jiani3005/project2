@@ -67,10 +67,13 @@ class AddPropertyFragment: Fragment(), AddPropertyListener {
 
     private fun onSuccess() {
         Toast.makeText(landlordActivity, "Successfully added!", Toast.LENGTH_SHORT).show()
+//        landlordActivity.showSnackbar("Successfully added!")
     }
 
     private fun onFailure() {
         Toast.makeText(landlordActivity, "Fail to added property.\nPlease try again.", Toast.LENGTH_SHORT).show()
+//        landlordActivity.showSnackbar("Fail to added property.\nPlease try again.")
+
     }
 
     override fun setAddressError() {

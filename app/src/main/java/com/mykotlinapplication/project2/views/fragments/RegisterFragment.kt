@@ -97,11 +97,13 @@ class RegisterFragment: Fragment(), RegisterListener {
     }
 
     private fun onFailure() {
-        Toast.makeText(mainActivity, "Register failed.\nEmail already exists.", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(mainActivity, "Register failed.\nEmail already exists.", Toast.LENGTH_SHORT).show()
+        mainActivity.showSnackbar("Register failed.\nEmail already exists.")
     }
 
     private fun onSuccess() {
-        Toast.makeText(mainActivity, "Successfully registered", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(mainActivity, "Successfully registered!", Toast.LENGTH_SHORT).show()
+        mainActivity.showSnackbar("Successfully registered!")
     }
 
 }

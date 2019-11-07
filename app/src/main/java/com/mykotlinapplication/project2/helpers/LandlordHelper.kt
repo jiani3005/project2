@@ -15,5 +15,6 @@ interface LandlordHelper {
     fun goToMainActivity()
     fun shareProperty()
     fun performCommunicationAction(title: String, message: String, action: String)
+    fun showSnackbar(message: String)
 
 }

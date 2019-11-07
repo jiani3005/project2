@@ -26,7 +26,7 @@ class TermsAndConditionsFragment: Fragment() {
 
         binding.buttonDone.setOnClickListener {
             mainActivity.supportFragmentManager.popBackStack()
-            mainActivity.goToRegister()
+//            mainActivity.goToRegister()
         }
 
         return binding.root

@@ -12,5 +12,6 @@ interface MainHelper {
     fun loginWithGoogle()
     fun loginWithFacebook()
     fun showAlertDialog()
+    fun showSnackbar(message: String)
 
 }

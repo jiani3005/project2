@@ -60,8 +60,7 @@ object SharedPreferencesManager {
     }
 
     fun setIsFirebaseUser(isFirebaseUser: Boolean) {
-        editor.putBoolean("user.firebase", isFirebaseUser)
-        editor.commit()
+        editor.putBoolean("user.firebase", isFirebaseUser).commit()
     }
 
     fun getIsFirebaseUser(): Boolean {

@@ -17,9 +17,8 @@ class TenantViewModel: ViewModel() {
     private var propertyList = repo.getListings()
 
     fun getListings(): LiveData<ArrayList<ListingsProperty>> {
-        isUpdating = repo.getIsUpdating()
-        propertyList.value = arrayListOf()
-        propertyList = repo.getListings()
+//        propertyList.value = arrayListOf()
+//        propertyList = repo.getListings()
         return propertyList
     }
 

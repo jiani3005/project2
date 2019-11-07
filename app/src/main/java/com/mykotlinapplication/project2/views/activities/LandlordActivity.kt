@@ -1,15 +1,26 @@
 package com.mykotlinapplication.project2.views.activities
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
+import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.single.PermissionListener
 import com.mykotlinapplication.project2.R
 import com.mykotlinapplication.project2.databinding.ActivityLandlordBinding
 import com.mykotlinapplication.project2.helpers.LandlordHelper
@@ -25,6 +36,7 @@ class LandlordActivity : AppCompatActivity(), LandlordHelper {
     private var TAG = "LandlordActivity"
     private var selectedProperty = LandlordProperty()
     private var selectedTenant = Tenant("", "", "", "", "", "")
+    private var isCallPermissionGranted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -122,8 +134,11 @@ class LandlordActivity : AppCompatActivity(), LandlordHelper {
     }
 
     private fun goToCall() {
-        startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:${selectedTenant.phone}")))
-
+//        if (isCallPermissionGranted) {
+//            startActivity(Intent(Intent.ACTION_CALL, Uri.parse("tel:${selectedTenant.phone}")))
+//        } else {
+            startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:${selectedTenant.phone}")))
+//        }
     }
 
     private fun goToMessage() {
@@ -147,6 +162,30 @@ class LandlordActivity : AppCompatActivity(), LandlordHelper {
             putExtra(Intent.EXTRA_TEXT, "Check out this property!\nAddress: $fullAddress")
         }
         startActivity(Intent.createChooser(intent, "Share using:"))
+
+    }
+
+    override fun showSnackbar(message: String) {
+        val marginSide = 0
+        val marginBottom = 200
+
+        val snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).setActionTextColor(resources.getColor(R.color.white))
+        snackbar.setAction("Dismiss") {
+            snackbar.dismiss()
+        }
+
+        val snackbarView = snackbar.view
+        val layoutParameter = snackbarView.layoutParams as FrameLayout.LayoutParams
+
+        layoutParameter.setMargins(
+            layoutParameter.leftMargin + marginSide,
+            layoutParameter.topMargin,
+            layoutParameter.rightMargin + marginSide,
+            layoutParameter.bottomMargin + marginBottom
+        )
+
+        snackbarView.layoutParams = layoutParameter
+        snackbar.show()
 
     }
 
@@ -190,5 +229,33 @@ class LandlordActivity : AppCompatActivity(), LandlordHelper {
 
         return outputString.trim()
     }
+
+//    private fun askCallPermission() {
+//        Dexter.withActivity(this).withPermission(Manifest.permission.CALL_PHONE).withListener(object: PermissionListener {
+//            override fun onPermissionGranted(response: PermissionGrantedResponse?) {
+//                isCallPermissionGranted = true
+//            }
+//
+//            override fun onPermissionRationaleShouldBeShown(permission: PermissionRequest?, token: PermissionToken?) {
+//                token?.continuePermissionRequest()
+//            }
+//
+//            override fun onPermissionDenied(response: PermissionDeniedResponse?) {
+//                callPermissionAlertDialog()
+//            }
+//
+//        })
+//    }
+
+//    private fun callPermissionAlertDialog() {
+//        val builder = AlertDialog.Builder(this).apply {
+//            setTitle("Call Tenant")
+//            setMessage("You have denied the direct call permission from our app. We will redirect to the call app instead.")
+//            setNeutralButton("Dismiss") { dialog, which ->
+//                goToCall()
+//            }
+//        }
+//        builder.create().show()
+//    }
 
 }

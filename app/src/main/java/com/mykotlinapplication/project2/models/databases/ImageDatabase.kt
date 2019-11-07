@@ -20,5 +20,6 @@ abstract class ImageDatabase: RoomDatabase() {
             }
             return instance!!
         }
+
     }
 }

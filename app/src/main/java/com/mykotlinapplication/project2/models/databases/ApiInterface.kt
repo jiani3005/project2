@@ -23,6 +23,9 @@ interface ApiInterface {
     @GET("property.php")
     fun getLandlordProperty(@Query("userid") userId: String, @Query("usertype") userType: String): Call<JsonElement>
 
+//    @GET("property.php")
+//    suspend fun getLandlordProperty(@Query("userid") userId: String, @Query("usertype") userType: String): LandlordPropertyList
+
     @GET("pro_mgt_add_pro.php")
     fun addProperty(@Query("address") address: String, @Query("city") city: String, @Query("state") state: String,
                     @Query("country") country: String, @Query("pro_status") property_status: String,
@@ -41,7 +44,10 @@ interface ApiInterface {
     @GET("remove-property.php")
     fun deleteProperty(@Query("propertyid") propertyId: String): Call<JsonElement>
 
+//    @GET("pro_mgt_property_all.php")
+//    fun getListings(): Single<ListingsPropertyList>
+
     @GET("pro_mgt_property_all.php")
-    fun getListings(): Single<ListingsPropertyList>
+    suspend fun getListings(): ListingsPropertyList
 
 }

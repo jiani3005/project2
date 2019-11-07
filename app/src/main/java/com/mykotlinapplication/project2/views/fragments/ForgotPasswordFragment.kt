@@ -60,11 +60,13 @@ class ForgotPasswordFragment: Fragment(), ForgotPasswordListener {
     }
 
     private fun onFailure() {
-        Toast.makeText(mainActivity, "Email is not registered.", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(mainActivity, "Email is not registered.", Toast.LENGTH_SHORT).show()
+        mainActivity.showSnackbar("Email is not registered.")
     }
 
     private fun onSuccess() {
-        Toast.makeText(mainActivity, "Please check the notification to retrieve your password.", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(mainActivity, "Please check the notification to retrieve your password.", Toast.LENGTH_SHORT).show()
+        mainActivity.showSnackbar("Please check the notification to retrieve your password.")
     }
 
 }
